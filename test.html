@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC装机助手 - 测试版</title>
+<style>
+body { font-family: 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; padding: 20px; }
+.section { background: #161b22; border: 1px solid #30363d; border-radius: 8px; margin: 10px 0; padding: 15px; }
+h2 { color: #58a6ff; }
+.comp-card { background: #21262d; border: 1px solid #30363d; padding: 10px; margin: 5px 0; cursor: pointer; }
+.comp-card:hover { border-color: #58a6ff; }
+.comp-card.selected { border-color: #3fb950; background: rgba(63,185,80,0.1); }
+.status { padding: 10px; background: #21262d; border-radius: 4px; margin: 10px 0; }
+.error { color: #f85149; }
+.success { color: #3fb950; }
+</style>
+</head>
+<body>
+<h1>🔧 PC装机助手 - 测试版</h1>
+<div id="status" class="status">加载中...</div>
+<div id="parts"></div>
+
+<script>
+// 简化的硬件数据
+const HARDWARE = {
+  cpus: [
+    {id:"i5-12400f", name:"Intel i5-12400F", brand:"intel", socket:"LGA1700", tdp:65, price:630},
+    {id:"i5-13600kf", name:"Intel i5-13600KF", brand:"intel", socket:"LGA1700", tdp:125, price:1480},
+    {id:"r5-7500f", name:"AMD R5 7500F", brand:"amd", socket:"AM5", tdp:65, price:800}
+  ],
+  gpus: [
+    {id:"rtx4060", name:"RTX 4060 8G", brand:"nvidia", vram:8, tdp:115, price:2299},
+    {id:"rtx4070s", name:"RTX 4070 Super", brand:"nvidia", vram:12, tdp:220, price:4499}
+  ],
+  mobos: [
+    {id:"b760m-k", name:"华硕 B760M-K", socket:"LGA1700", ramType:"ddr5", price:799},
+    {id:"b650m-k", name:"华硕 B650M-K", socket:"AM5", ramType:"ddr5", price:799}
+  ],
+  rams: [
+    {id:"ddr5-16", name:"DDR5 16GB 6000MHz", type:"ddr5", capacity:16, price:320},
+    {id:"ddr5-32", name:"DDR5 32GB 6000MHz", type:"ddr5", capacity:32, price:499}
+  ],
+  storages: [
+    {id:"nvme-1t", name:"NVMe 1TB PCIe4.0", type:"nvme", capacity:1, price:450}
+  ],
+  psus: [
+    {id:"psu-650", name:"650W 铜牌", watt:650, price:299},
+    {id:"psu-850", name:"850W 金牌", watt:850, price:499}
+  ],
+  cases: [
+    {id:"case-matx", name:"mATX 机箱", ff:"mATX", price:199}
+  ],
+  coolers: [
+    {id:"cooler-240", name:"240水冷", type:"aio", tdpMax:250, price:299}
+  ]
+};
+
+// 状态
+const state = {
+  cpu: null, gpu: null, mobo: null, ram: null,
+  storage: null, psu: null, case: null, cooler: null
+};
+
+// 渲染状态
+function updateStatus() {
+  const selected = Object.values(state).filter(v => v !== null);
+  const total = selected.reduce((sum, p) => sum + (p ? p.price : 0), 0);
+  document.getElementById('status').innerHTML = `
+    <span class="success">✅ 已选择 ${selected.length}/8 项</span> |
+    总价: <strong>¥${total.toLocaleString()}</strong>
+  `;
+}
+
+// 渲染配件列表
+function renderParts() {
+  const parts = document.getElementById('parts');
+  let html = '';
+
+  const sections = [
+    {key: 'cpu', label: 'CPU', parts: HARDWARE.cpus},
+    {key: 'gpu', label: 'GPU', parts: HARDWARE.gpus},
+    {key: 'mobo', label: '主板', parts: HARDWARE.mobos},
+    {key: 'ram', label: '内存', parts: HARDWARE.rams},
+    {key: 'storage', label: '存储', parts: HARDWARE.storages},
+    {key: 'psu', label: '电源', parts: HARDWARE.psus},
+    {key: 'case', label: '机箱', parts: HARDWARE.cases},
+    {key: 'cooler', label: '散热', parts: HARDWARE.coolers}
+  ];
+
+  sections.forEach(s => {
+    html += `<div class="section"><h2>${s.label}</h2>`;
+    s.parts.forEach(p => {
+      const isSelected = state[s.key] && state[s.key].id === p.id;
+      html += `
+        <div class="comp-card ${isSelected ? 'selected' : ''}"
+             onclick="selectPart('${s.key}', '${p.id}')">
+          <strong>${p.name}</strong> - ¥${p.price}
+          ${isSelected ? ' ✓' : ''}
+        </div>
+      `;
+    });
+    html += '</div>';
+  });
+
+  parts.innerHTML = html;
+}
+
+// 选择配件
+function selectPart(key, id) {
+  const parts = {
+    cpu: HARDWARE.cpus,
+    gpu: HARDWARE.gpus,
+    mobo: HARDWARE.mobos,
+    ram: HARDWARE.rams,
+    storage: HARDWARE.storages,
+    psu: HARDWARE.psus,
+    case: HARDWARE.cases,
+    cooler: HARDWARE.coolers
+  };
+
+  const item = parts[key].find(p => p.id === id);
+  if (!item) return;
+
+  // 切换选择
+  if (state[key] && state[key].id === id) {
+    state[key] = null;
+  } else {
+    state[key] = item;
+  }
+
+  renderParts();
+  updateStatus();
+}
+
+// 初始化
+document.addEventListener('DOMContentLoaded', () => {
+  renderParts();
+  updateStatus();
+  console.log('✅ PC装机助手测试版已加载');
+  console.log('HARDWARE:', HARDWARE);
+  console.log('state:', state);
+});
+</script>
+</body>
+</html>
