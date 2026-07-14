@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC装机助手 - 诊断测试</title>
+<style>
+body { font-family: 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; padding: 20px; margin: 0; }
+.diag-box { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin: 10px 0; }
+.diag-title { font-weight: bold; color: #58a6ff; margin-bottom: 10px; font-size: 16px; }
+.success { color: #3fb950; }
+.error { color: #f85149; }
+.warning { color: #d2991d; }
+pre { background: #21262d; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 12px; }
+button { background: #58a6ff; color: #000; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin: 5px; font-weight: bold; }
+button:hover { background: #79b8ff; }
+</style>
+</head>
+<body>
+<h1>🔧 PC装机助手 - 诊断测试</h1>
+
+<div class="diag-box">
+  <div class="diag-title">1. 页面加载状态</div>
+  <div id="load-status">检查中...</div>
+</div>
+
+<div class="diag-box">
+  <div class="diag-title">2. JavaScript 错误</div>
+  <div id="js-errors">无错误</div>
+</div>
+
+<div class="diag-box">
+  <div class="diag-title">3. 关键变量检查</div>
+  <div id="var-check">检查中...</div>
+</div>
+
+<div class="diag-box">
+  <div class="diag-title">4. DOM 元素检查</div>
+  <div id="dom-check">检查中...</div>
+</div>
+
+<div class="diag-box">
+  <div class="diag-title">5. 函数存在性检查</div>
+  <div id="func-check">检查中...</div>
+</div>
+
+<div class="diag-box">
+  <div class="diag-title">6. 事件绑定检查</div>
+  <div id="event-check">检查中...</div>
+</div>
+
+<div class="diag-box">
+  <div class="diag-title">7. 控制台测试命令</div>
+  <div>
+    <button onclick="testHARDWARE()">测试 HARDWARE</button>
+    <button onclick="testBuildSidebar()">测试 buildSidebar</button>
+    <button onclick="testRenderAll()">测试 renderAll</button>
+    <button onclick="testSelectPart()">测试 selectPart</button>
+  </div>
+  <div id="test-output"></div>
+</div>
+
+<script>
+// 捕获所有错误
+window.onerror = function(msg, url, line, col, error) {
+  document.getElementById('js-errors').innerHTML =
+    `<div class="error">❌ 错误: ${msg}<br>文件: ${url}<br>行: ${line}:${col}</div>`;
+  return false;
+};
+
+window.addEventListener('load', () => {
+  document.getElementById('load-status').innerHTML = '<span class="success">✅ 页面加载完成</span>';
+});
+
+// 等待一小段时间确保所有脚本执行完成
+setTimeout(runDiagnostics, 500);
+
+function runDiagnostics() {
+  checkVariables();
+  checkDOM();
+  checkFunctions();
+  checkEvents();
+}
+
+function checkVariables() {
+  const vars = ['HARDWARE', 'SECTIONS', 'state', 'PLATFORM_MAP', 'GAME_BASELINE'];
+  let html = '';
+  vars.forEach(v => {
+    try {
+      const val = window[v];
+      if (val !== undefined) {
+        const type = typeof val;
+        html += `<span class="success">✅ ${v} (${type}) 已定义</span><br>`;
+      } else {
+        html += `<span class="error">❌ ${v} 未定义</span><br>`;
+      }
+    } catch(e) {
+      html += `<span class="error">❌ ${v} 访问错误: ${e.message}</span><br>`;
+    }
+  });
+
+  // 检查 HARDWARE 内容
+  if (typeof HARDWARE !== 'undefined') {
+    const counts = {
+      CPU: HARDWARE.cpus ? HARDWARE.cpus.length : 0,
+      GPU: HARDWARE.gpus ? HARDWARE.gpus.length : 0,
+      主板: HARDWARE.mobos ? HARDWARE.mobos.length : 0,
+      内存: HARDWARE.rams ? HARDWARE.rams.length : 0
+    };
+    html += `<pre>${JSON.stringify(counts, null, 2)}</pre>`;
+  }
+
+  document.getElementById('var-check').innerHTML = html;
+}
+
+function checkDOM() {
+  const elements = ['#sidebar', '#sections', '#status-bar', '.tab-btn', '#panel-config'];
+  let html = '';
+  elements.forEach(sel => {
+    const el = document.querySelector(sel);
+    if (el) {
+      html += `<span class="success">✅ ${sel} 存在</span><br>`;
+    } else {
+      html += `<span class="error">❌ ${sel} 不存在</span><br>`;
+    }
+  });
+
+  const sections = document.getElementById('sections');
+  if (sections) {
+    const childCount = sections.children.length;
+    html += `<br><span>配件板块数量: ${childCount}</span>`;
+    if (childCount === 0) {
+      html += '<br><span class="warning">⚠️ 板块未渲染，可能 buildSidebar() 未执行</span>';
+    }
+  }
+
+  document.getElementById('dom-check').innerHTML = html;
+}
+
+function checkFunctions() {
+  const funcs = ['buildSidebar', 'renderAll', 'renderSection', 'selectPart', 'getFiltered', 'loadPrices'];
+  let html = '';
+  funcs.forEach(fn => {
+    if (typeof window[fn] === 'function') {
+      html += `<span class="success">✅ ${fn}() 存在</span> `;
+    } else {
+      html += `<span class="error">❌ ${fn}() 不存在</span> `;
+    }
+  });
+  document.getElementById('func-check').innerHTML = html;
+}
+
+function checkEvents() {
+  // 检查是否有 onclick 属性的元素
+  const onclickEls = document.querySelectorAll('[onclick]');
+  let html = `找到 ${onclickEls.length} 个 onclick 元素<br>`;
+
+  if (onclickEls.length === 0) {
+    html += '<span class="warning">⚠️ 没有 onclick 元素，buildSidebar() 可能未执行</span>';
+  } else {
+    // 检查第一个配件卡片
+    const firstCard = document.querySelector('.comp-card');
+    if (firstCard) {
+      html += '<span class="success">✅ 配件卡片存在</span>';
+    } else {
+      html += '<span class="error">❌ 配件卡片不存在</span>';
+    }
+  }
+
+  document.getElementById('event-check').innerHTML = html;
+}
+
+// 测试函数
+function testHARDWARE() {
+  const output = document.getElementById('test-output');
+  try {
+    output.innerHTML = `<pre>HARDWARE.cpus.length = ${HARDWARE.cpus.length}\nHARDWARE.gpus.length = ${HARDWARE.gpus.length}</pre>`;
+    output.innerHTML += '<span class="success">✅ HARDWARE 数据正常</span>';
+  } catch(e) {
+    output.innerHTML = `<span class="error">❌ 错误: ${e.message}</span>`;
+  }
+}
+
+function testBuildSidebar() {
+  const output = document.getElementById('test-output');
+  try {
+    buildSidebar();
+    output.innerHTML = '<span class="success">✅ buildSidebar() 执行成功</span>';
+    output.innerHTML += `<br>配件板块: ${document.getElementById('sections').children.length} 个`;
+  } catch(e) {
+    output.innerHTML = `<span class="error">❌ 错误: ${e.message}</span>`;
+  }
+}
+
+function testRenderAll() {
+  const output = document.getElementById('test-output');
+  try {
+    renderAll();
+    output.innerHTML = '<span class="success">✅ renderAll() 执行成功</span>';
+  } catch(e) {
+    output.innerHTML = `<span class="error">❌ 错误: ${e.message}</span>`;
+  }
+}
+
+function testSelectPart() {
+  const output = document.getElementById('test-output');
+  try {
+    selectPart('cpu', 'i5-12400f');
+    output.innerHTML = `<span class="success">✅ selectPart('cpu', 'i5-12400f') 执行成功</span>`;
+    output.innerHTML += `<br>state.cpu = ${JSON.stringify(state.cpu)}`;
+  } catch(e) {
+    output.innerHTML = `<span class="error">❌ 错误: ${e.message}</span>`;
+  }
+}
+</script>
+</body>
+</html>
