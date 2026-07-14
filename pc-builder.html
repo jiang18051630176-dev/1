@@ -612,6 +612,7 @@ async function loadMultiPlatformPrices() {
 
     // 构建多平台价格索引
     multiPlatformPrices = {};
+    // 兼容两种格式: data.parts (旧) 或 data.cpus/data.gpus (新)
     if (data.parts) {
       Object.entries(data.parts).forEach(([partType, items]) => {
         if (!multiPlatformPrices[partType]) multiPlatformPrices[partType] = {};
