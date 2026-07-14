@@ -1,0 +1,9 @@
+{
+  "name": "pc-builder",
+  "version": "1.0.0",
+  "description": "PC装机助手 - 配置选择 & 性能评估",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'Static site ready'"
+  }
+}

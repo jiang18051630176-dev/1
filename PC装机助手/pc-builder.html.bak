@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC 装机助手 — 配置选择 & 性能评估</title>
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-primary:#0d1117;--bg-secondary:#161b22;--bg-tertiary:#21262d;
+  --border:#30363d;--border-hover:#58a6ff;
+  --text-primary:#e6edf3;--text-secondary:#8b949e;--text-muted:#6e7681;
+  --accent-blue:#58a6ff;--accent-green:#3fb950;--accent-yellow:#d2991d;
+  --accent-orange:#f0883e;--accent-red:#f85149;
+  --amd:#ED1C24;--intel:#0071C5;--nvidia:#76B900;
+  --radius:8px;--radius-sm:4px;--transition:200ms ease;
+  --sidebar-width:340px;
+  --font-mono:'JetBrains Mono','Cascadia Code','Consolas',monospace;
+  --font-sans:'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;
+}
+html{font-size:15px;scroll-behavior:smooth}
+body{
+  font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-primary);
+  display:flex;height:100vh;overflow:hidden;line-height:1.5;
+}
+a{color:var(--accent-blue);text-decoration:none}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg-secondary)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--text-muted)}
+
+/* ===== LEFT SIDEBAR ===== */
+#sidebar{
+  width:var(--sidebar-width);min-width:var(--sidebar-width);
+  background:var(--bg-secondary);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;z-index:10;
+}
+#sidebar-header{
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);
+}
+#sidebar-header h1{font-size:1.25rem;font-weight:700;letter-spacing:-0.5px}
+#sidebar-header h1 span{color:var(--accent-blue)}
+#sidebar-header .subtitle{font-size:.75rem;color:var(--text-secondary);margin-top:2px}
+#status-bar{
+  display:flex;align-items:center;gap:8px;padding:10px 20px;
+  background:var(--bg-tertiary);border-bottom:1px solid var(--border);font-size:.8rem;
+}
+#status-bar .dot{width:8px;height:8px;border-radius:50%}
+#status-bar .dot.ok{background:var(--accent-green)}
+#status-bar .dot.warn{background:var(--accent-yellow)}
+#status-bar .dot.err{background:var(--accent-red)}
+#status-bar .price{font-weight:700;font-family:var(--font-mono);margin-left:auto;font-size:.9rem}
+
+#sections{flex:1;overflow-y:auto;padding:8px 0}
+.section{
+  border-bottom:1px solid var(--border);margin:0 8px;
+  border-radius:var(--radius);overflow:hidden;margin-bottom:4px;
+}
+.section-header{
+  display:flex;align-items:center;gap:8px;padding:12px 14px;
+  cursor:pointer;user-select:none;transition:background var(--transition);
+  font-weight:600;font-size:.9rem;
+}
+.section-header:hover{background:var(--bg-tertiary)}
+.section-header .icon{font-size:1.1rem;width:24px;text-align:center}
+.section-header .arrow{transition:transform var(--transition);margin-left:auto;color:var(--text-muted)}
+.section-header .selected-badge{
+  font-size:.7rem;background:var(--accent-blue);color:#000;padding:2px 8px;
+  border-radius:10px;font-weight:700;display:none;white-space:nowrap;
+}
+.section-header .selected-badge.show{display:inline}
+.section-body{max-height:600px;overflow-y:auto;transition:max-height .3s ease,padding .3s ease}
+.section-body.collapsed{max-height:0;overflow:hidden}
+.section-body-inner{padding:0 12px 12px}
+
+/* Filter row */
+.filter-row{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.filter-row label{font-size:.75rem;color:var(--text-secondary);display:flex;align-items:center;gap:3px}
+.filter-btn{
+  padding:3px 10px;font-size:.72rem;border:1px solid var(--border);border-radius:12px;
+  background:transparent;color:var(--text-secondary);cursor:pointer;transition:all var(--transition);
+  font-family:var(--font-sans);
+}
+.filter-btn:hover{border-color:var(--accent-blue);color:var(--text-primary)}
+.filter-btn.active{background:var(--accent-blue);border-color:var(--accent-blue);color:#000;font-weight:600}
+
+/* Component cards */
+.comp-list{display:flex;flex-direction:column;gap:4px;max-height:260px;overflow-y:auto}
+.comp-card{
+  padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);
+  cursor:pointer;transition:all var(--transition);font-size:.8rem;
+  display:flex;justify-content:space-between;align-items:center;gap:6px;
+}
+.comp-card:hover{border-color:var(--accent-blue);transform:translateY(-1px)}
+.comp-card.selected{border-color:var(--accent-green);background:rgba(63,185,80,0.08);box-shadow:0 0 8px rgba(63,185,80,0.15)}
+.comp-card.incompatible{opacity:.35;cursor:not-allowed;position:relative}
+.comp-card.incompatible:hover{border-color:var(--accent-red);transform:none}
+.comp-card .spec{color:var(--text-secondary);font-size:.72rem;white-space:nowrap}
+.comp-card .price{font-family:var(--font-mono);font-weight:600;color:var(--accent-yellow);white-space:nowrap}
+.comp-card .tag{font-size:.65rem;padding:1px 5px;border-radius:8px;background:var(--bg-tertiary);white-space:nowrap}
+.comp-card.incompatible .tag{background:rgba(248,81,73,0.15);color:var(--accent-red)}
+
+.no-match{text-align:center;color:var(--text-muted);padding:20px;font-size:.8rem}
+
+/* ===== MAIN CONTENT ===== */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+#tabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg-secondary)}
+.tab-btn{
+  padding:12px 24px;font-size:.85rem;font-weight:600;border:none;background:transparent;
+  color:var(--text-secondary);cursor:pointer;transition:all var(--transition);
+  border-bottom:2px solid transparent;font-family:var(--font-sans);
+}
+.tab-btn:hover{color:var(--text-primary)}
+.tab-btn.active{color:var(--accent-blue);border-bottom-color:var(--accent-blue)}
+
+#tab-content{flex:1;overflow-y:auto;padding:20px 24px}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* Config list */
+#config-list{}
+#config-list h2{font-size:1.1rem;margin-bottom:16px;font-weight:700}
+.config-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.config-table th,.config-table td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.config-table th{color:var(--text-secondary);font-weight:600;font-size:.75rem;text-transform:uppercase}
+.config-table .empty-row td{color:var(--text-muted);font-style:italic;text-align:center;padding:16px}
+.config-table .category{font-weight:600;color:var(--accent-blue)}
+.config-total{
+  text-align:right;margin-top:16px;font-size:1.3rem;font-weight:700;
+  font-family:var(--font-mono);
+}
+.config-total span{color:var(--accent-green)}
+
+/* Performance section */
+#perf-content h2{font-size:1.1rem;margin-bottom:6px;font-weight:700}
+#perf-content .section-desc{color:var(--text-secondary);font-size:.8rem;margin-bottom:20px}
+.perf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:24px}
+.perf-card{
+  background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px;transition:border-color var(--transition);
+}
+.perf-card:hover{border-color:var(--accent-blue)}
+.perf-card h3{font-size:.85rem;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.perf-card table{width:100%;font-size:.78rem;border-collapse:collapse}
+.perf-card th{color:var(--text-secondary);font-weight:500;font-size:.7rem;padding:4px 6px;border-bottom:1px solid var(--border)}
+.perf-card td{text-align:center;padding:4px 6px;font-family:var(--font-mono);font-weight:600}
+.perf-card .rating{font-size:.7rem;padding:2px 6px;border-radius:8px;font-weight:600}
+.rating-s{background:rgba(212,153,29,0.2);color:#f0c040}
+.rating-a{background:rgba(63,185,80,0.2);color:var(--accent-green)}
+.rating-b{background:rgba(63,185,80,0.1);color:#7ee787}
+.rating-c{background:rgba(210,153,29,0.15);color:var(--accent-yellow)}
+.rating-d{background:rgba(240,136,62,0.15);color:var(--accent-orange)}
+.rating-f{background:rgba(248,81,73,0.15);color:var(--accent-red)}
+.perf-card .rec{font-size:.72rem;color:var(--text-secondary);margin-top:8px;font-style:italic}
+
+/* AI section */
+.ai-card{
+  background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;margin-top:8px;
+}
+.ai-card h3{font-size:.95rem;margin-bottom:12px}
+.ai-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.ai-spec{font-size:.8rem;color:var(--text-secondary)}
+.ai-spec strong{color:var(--text-primary)}
+.ai-models{font-size:.78rem}
+.ai-models table{width:100%;border-collapse:collapse;margin-top:8px}
+.ai-models th,.ai-models td{padding:6px 10px;border-bottom:1px solid var(--border);text-align:left}
+.ai-models .ok{color:var(--accent-green)}
+.ai-models .warn{color:var(--accent-yellow)}
+.ai-models .no{color:var(--accent-red)}
+.ai-speed{font-size:.85rem;margin-top:12px;padding:12px;background:var(--bg-tertiary);border-radius:var(--radius-sm)}
+.ai-speed strong{color:var(--accent-green);font-family:var(--font-mono)}
+
+/* Tools */
+.btn{
+  padding:8px 16px;font-size:.8rem;border:1px solid var(--border);border-radius:var(--radius-sm);
+  background:var(--bg-tertiary);color:var(--text-primary);cursor:pointer;transition:all var(--transition);
+  font-family:var(--font-sans);
+}
+.btn:hover{border-color:var(--accent-blue);color:var(--accent-blue)}
+.btn.primary{background:var(--accent-blue);border-color:var(--accent-blue);color:#000;font-weight:600}
+.btn.primary:hover{opacity:.85}
+.toolbar{display:flex;gap:8px;margin-bottom:16px}
+
+/* Incompatible tooltip */
+[data-tooltip]{position:relative}
+[data-tooltip]:hover::after{
+  content:attr(data-tooltip);position:absolute;bottom:calc(100% + 6px);left:50%;
+  transform:translateX(-50%);background:#000;color:#fff;padding:4px 10px;
+  border-radius:4px;font-size:.7rem;white-space:nowrap;z-index:100;
+  pointer-events:none;border:1px solid var(--border);
+}
+
+/* Responsive */
+@media(max-width:900px){
+  body{flex-direction:column}
+  #sidebar{width:100%;min-width:100%;max-height:45vh}
+  #main{height:55vh}
+  .perf-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside id="sidebar">
+  <div id="sidebar-header">
+    <h1>🖥️ <span>PC</span> 装机助手</h1>
+    <div class="subtitle">逐项选择配件 · 自动兼容检查 · 性能评估</div>
+  </div>
+  <div id="status-bar">
+    <span class="dot ok" id="status-dot"></span>
+    <span id="status-text">待选择配件</span>
+    <button id="refresh-btn" onclick="refreshPrices()" style="margin-left:8px;padding:2px 10px;font-size:.7rem;background:var(--accent-blue);color:#000;border:none;border-radius:10px;cursor:pointer;font-weight:700;display:none">🔄 刷新价格</button>
+    <span class="price" id="total-price">¥0</span>
+  </div>
+  <div id="sections">
+    <!-- Dynamically populated -->
+  </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<main id="main">
+  <div id="tabs">
+    <button class="tab-btn active" data-tab="config">🛒 配置清单</button>
+    <button class="tab-btn" data-tab="perf">📊 性能评估</button>
+  </div>
+  <div id="tab-content">
+    <div class="tab-panel active" id="panel-config">
+      <div class="toolbar">
+        <button class="btn" onclick="resetAll()">🔄 重置全部</button>
+        <button class="btn" onclick="exportConfig()">📋 复制清单</button>
+      </div>
+      <div id="config-list"></div>
+    </div>
+    <div class="tab-panel" id="panel-perf" style="display:none">
+      <div id="perf-content">
+        <p class="section-desc" style="text-align:center;padding:40px">请先在左侧选择 CPU 和 GPU 后再查看性能评估</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+// =====================================================================
+// HARDWARE DATABASE — 2025 年中国市场行情
+// =====================================================================
+const HARDWARE = {
+  // ---- CPU (2025年7月京东/淘宝/拼多多行情, 二手参考闲鱼) ----
+  cpus: [
+    // === Intel LGA1851 (Core Ultra 200S, 2024Q4) ===
+    {id:"u5-245kf",name:"Intel Core Ultra 5 245KF",brand:"intel",socket:"LGA1851",tdp:125,cores:"14C/14T(6P+8E)",single:120,multi:150,price:2150,priceUsed:null,tier:"mid",igpu:false,ddr5:true,ddr4:false,memFreq:6400},
+    {id:"u7-265kf",name:"Intel Core Ultra 7 265KF",brand:"intel",socket:"LGA1851",tdp:125,cores:"20C/20T(8P+12E)",single:135,multi:210,price:3100,priceUsed:null,tier:"high",igpu:false,ddr5:true,ddr4:false,memFreq:6400},
+    {id:"u9-285k",name:"Intel Core Ultra 9 285K",brand:"intel",socket:"LGA1851",tdp:150,cores:"24C/24T(8P+16E)",single:145,multi:290,price:4700,priceUsed:null,tier:"flagship",igpu:true,ddr5:true,ddr4:false,memFreq:6400},
+    // === Intel LGA1700 (12/13/14代) ===
+    {id:"i3-12100f",name:"Intel Core i3-12100F",brand:"intel",socket:"LGA1700",tdp:58,cores:"4C/8T",single:85,multi:70,price:420,priceUsed:280,tier:"entry",igpu:false,ddr5:true,ddr4:true,memFreq:4800},
+    {id:"i5-12400f",name:"Intel Core i5-12400F",brand:"intel",socket:"LGA1700",tdp:65,cores:"6C/12T",single:95,multi:90,price:630,priceUsed:420,tier:"entry",igpu:false,ddr5:true,ddr4:true,memFreq:4800},
+    {id:"i5-12600kf",name:"Intel Core i5-12600KF",brand:"intel",socket:"LGA1700",tdp:125,cores:"10C/16T(6P+4E)",single:105,multi:120,price:980,priceUsed:700,tier:"mid",igpu:false,ddr5:true,ddr4:true,memFreq:5600},
+    {id:"i5-13600kf",name:"Intel Core i5-13600KF",brand:"intel",socket:"LGA1700",tdp:125,cores:"14C/20T(6P+8E)",single:120,multi:150,price:1480,priceUsed:1080,tier:"mid",igpu:false,ddr5:true,ddr4:true,memFreq:5600},
+    {id:"i5-14600kf",name:"Intel Core i5-14600KF",brand:"intel",socket:"LGA1700",tdp:125,cores:"14C/20T(6P+8E)",single:125,multi:155,price:1580,priceUsed:1180,tier:"mid",igpu:false,ddr5:true,ddr4:true,memFreq:6000},
+    {id:"i7-13700kf",name:"Intel Core i7-13700KF",brand:"intel",socket:"LGA1700",tdp:125,cores:"16C/24T(8P+8E)",single:130,multi:200,price:2180,priceUsed:1550,tier:"high",igpu:false,ddr5:true,ddr4:true,memFreq:5600},
+    {id:"i7-14700kf",name:"Intel Core i7-14700KF",brand:"intel",socket:"LGA1700",tdp:125,cores:"20C/28T(8P+12E)",single:135,multi:220,price:2380,priceUsed:1680,tier:"high",igpu:false,ddr5:true,ddr4:true,memFreq:6000},
+    {id:"i9-13900k",name:"Intel Core i9-13900K",brand:"intel",socket:"LGA1700",tdp:150,cores:"24C/32T(8P+16E)",single:140,multi:280,price:3200,priceUsed:2200,tier:"flagship",igpu:true,ddr5:true,ddr4:true,memFreq:5600},
+    {id:"i9-14900k",name:"Intel Core i9-14900K",brand:"intel",socket:"LGA1700",tdp:150,cores:"24C/32T(8P+16E)",single:145,multi:290,price:3650,priceUsed:2600,tier:"flagship",igpu:true,ddr5:true,ddr4:true,memFreq:6000},
+    // === AMD AM5 Ryzen 9000 (Zen 5, 2024Q3) ===
+    {id:"r5-9600",name:"AMD Ryzen 5 9600",brand:"amd",socket:"AM5",tdp:65,cores:"6C/12T",single:120,multi:110,price:1250,priceUsed:null,tier:"entry",igpu:true,ddr5:true,ddr4:false,memFreq:5600},
+    {id:"r5-9600x",name:"AMD Ryzen 5 9600X",brand:"amd",socket:"AM5",tdp:105,cores:"6C/12T",single:128,multi:118,price:1520,priceUsed:null,tier:"mid",igpu:true,ddr5:true,ddr4:false,memFreq:5600},
+    {id:"r7-9700x",name:"AMD Ryzen 7 9700X",brand:"amd",socket:"AM5",tdp:65,cores:"8C/16T",single:138,multi:180,price:2100,priceUsed:null,tier:"mid",igpu:true,ddr5:true,ddr4:false,memFreq:5600},
+    {id:"r7-9800x3d",name:"AMD Ryzen 7 9800X3D",brand:"amd",socket:"AM5",tdp:120,cores:"8C/16T 3D V-Cache",single:145,multi:195,price:2950,priceUsed:null,tier:"high",igpu:true,ddr5:true,ddr4:false,memFreq:5600},
+    {id:"r9-9900x",name:"AMD Ryzen 9 9900X",brand:"amd",socket:"AM5",tdp:120,cores:"12C/24T",single:140,multi:270,price:2750,priceUsed:null,tier:"high",igpu:true,ddr5:true,ddr4:false,memFreq:5600},
+    {id:"r9-9950x3d",name:"AMD Ryzen 9 9950X3D",brand:"amd",socket:"AM5",tdp:170,cores:"16C/32T 3D V-Cache",single:155,multi:340,price:4700,priceUsed:null,tier:"flagship",igpu:true,ddr5:true,ddr4:false,memFreq:5600},
+    // === AMD AM5 Ryzen 7000 (Zen 4) ===
+    {id:"r5-7500f",name:"AMD Ryzen 5 7500F",brand:"amd",socket:"AM5",tdp:65,cores:"6C/12T",single:100,multi:95,price:800,priceUsed:550,tier:"entry",igpu:false,ddr5:true,ddr4:false,memFreq:5200},
+    {id:"r5-7600x",name:"AMD Ryzen 5 7600X",brand:"amd",socket:"AM5",tdp:105,cores:"6C/12T",single:115,multi:105,price:1020,priceUsed:720,tier:"mid",igpu:true,ddr5:true,ddr4:false,memFreq:5200},
+    {id:"r7-7700x",name:"AMD Ryzen 7 7700X",brand:"amd",socket:"AM5",tdp:105,cores:"8C/16T",single:125,multi:160,price:1580,priceUsed:1080,tier:"mid",igpu:true,ddr5:true,ddr4:false,memFreq:5200},
+    {id:"r7-7800x3d",name:"AMD Ryzen 7 7800X3D",brand:"amd",socket:"AM5",tdp:120,cores:"8C/16T 3D V-Cache",single:130,multi:175,price:2250,priceUsed:1650,tier:"high",igpu:true,ddr5:true,ddr4:false,memFreq:5200},
+    {id:"r9-7900x",name:"AMD Ryzen 9 7900X",brand:"amd",socket:"AM5",tdp:170,cores:"12C/24T",single:135,multi:250,price:2480,priceUsed:1750,tier:"high",igpu:true,ddr5:true,ddr4:false,memFreq:5200},
+    {id:"r9-7950x",name:"AMD Ryzen 9 7950X",brand:"amd",socket:"AM5",tdp:170,cores:"16C/32T",single:140,multi:320,price:3200,priceUsed:2200,tier:"flagship",igpu:true,ddr5:true,ddr4:false,memFreq:5200},
+    // === AMD AM4 (Zen 3) ===
+    {id:"r5-5600",name:"AMD Ryzen 5 5600",brand:"amd",socket:"AM4",tdp:65,cores:"6C/12T",single:88,multi:85,price:460,priceUsed:320,tier:"entry",igpu:false,ddr5:false,ddr4:true,memFreq:3200},
+    {id:"r7-5700x3d",name:"AMD Ryzen 7 5700X3D",brand:"amd",socket:"AM4",tdp:105,cores:"8C/16T 3D V-Cache",single:110,multi:145,price:1020,priceUsed:720,tier:"mid",igpu:false,ddr5:false,ddr4:true,memFreq:3200},
+  ],
+
+  // ---- GPU (2025年7月京东/淘宝/拼多多行情, 二手参考闲鱼) ----
+  gpus: [
+    // === NVIDIA RTX 50 Series (Blackwell) ===
+    {id:"rtx5090",name:"NVIDIA RTX 5090 32GB",brand:"nvidia",vram:32,vramType:"GDDR7",busWidth:512,bw:1792,tdp:575,price:24400,priceUsed:null,tier:"flagship",perf:2.80},
+    {id:"rtx5090d",name:"NVIDIA RTX 5090D 32GB",brand:"nvidia",vram:32,vramType:"GDDR7",busWidth:512,bw:1792,tdp:550,price:16500,priceUsed:null,tier:"flagship",perf:2.70},
+    {id:"rtx5080",name:"NVIDIA RTX 5080 16GB",brand:"nvidia",vram:16,vramType:"GDDR7",busWidth:256,bw:1024,tdp:360,price:16000,priceUsed:null,tier:"flagship",perf:2.10},
+    {id:"rtx5070ti",name:"NVIDIA RTX 5070 Ti 16GB",brand:"nvidia",vram:16,vramType:"GDDR7",busWidth:256,bw:896,tdp:300,price:8500,priceUsed:null,tier:"high",perf:1.65},
+    {id:"rtx5070",name:"NVIDIA RTX 5070 12GB",brand:"nvidia",vram:12,vramType:"GDDR7",busWidth:192,bw:672,tdp:250,price:4900,priceUsed:null,tier:"mid",perf:1.35},
+    {id:"rtx5060ti16",name:"NVIDIA RTX 5060 Ti 16GB",brand:"nvidia",vram:16,vramType:"GDDR7",busWidth:128,bw:448,tdp:180,price:4100,priceUsed:null,tier:"mid",perf:1.05},
+    {id:"rtx5060ti8",name:"NVIDIA RTX 5060 Ti 8GB",brand:"nvidia",vram:8,vramType:"GDDR7",busWidth:128,bw:448,tdp:180,price:3400,priceUsed:null,tier:"entry",perf:0.95},
+    {id:"rtx5060",name:"NVIDIA RTX 5060 8GB",brand:"nvidia",vram:8,vramType:"GDDR7",busWidth:128,bw:355,tdp:145,price:2900,priceUsed:null,tier:"entry",perf:0.82},
+    // === NVIDIA RTX 40 Series (Ada Lovelace) ===
+    {id:"rtx4090",name:"NVIDIA RTX 4090 24GB",brand:"nvidia",vram:24,vramType:"GDDR6X",busWidth:384,bw:1008,tdp:450,price:14800,priceUsed:11000,tier:"flagship",perf:2.30},
+    {id:"rtx4090d",name:"NVIDIA RTX 4090D 24GB",brand:"nvidia",vram:24,vramType:"GDDR6X",busWidth:384,bw:1008,tdp:425,price:12800,priceUsed:9500,tier:"flagship",perf:2.20},
+    {id:"rtx4080s",name:"NVIDIA RTX 4080 Super 16GB",brand:"nvidia",vram:16,vramType:"GDDR6X",busWidth:256,bw:736,tdp:320,price:7500,priceUsed:5600,tier:"high",perf:1.75},
+    {id:"rtx4070tis",name:"NVIDIA RTX 4070 Ti Super 16GB",brand:"nvidia",vram:16,vramType:"GDDR6X",busWidth:256,bw:672,tdp:285,price:5600,priceUsed:4200,tier:"high",perf:1.40},
+    {id:"rtx4070s",name:"NVIDIA RTX 4070 Super 12GB",brand:"nvidia",vram:12,vramType:"GDDR6X",busWidth:192,bw:504,tdp:220,price:4450,priceUsed:3300,tier:"mid",perf:1.15},
+    {id:"rtx4070",name:"NVIDIA RTX 4070 12GB",brand:"nvidia",vram:12,vramType:"GDDR6X",busWidth:192,bw:504,tdp:200,price:3950,priceUsed:2900,tier:"mid",perf:1.00},
+    {id:"rtx4060ti16",name:"NVIDIA RTX 4060 Ti 16GB",brand:"nvidia",vram:16,vramType:"GDDR6",busWidth:128,bw:288,tdp:165,price:3250,priceUsed:2400,tier:"mid",perf:0.74},
+    {id:"rtx4060ti8",name:"NVIDIA RTX 4060 Ti 8GB",brand:"nvidia",vram:8,vramType:"GDDR6",busWidth:128,bw:288,tdp:160,price:2650,priceUsed:1900,tier:"entry",perf:0.72},
+    {id:"rtx4060",name:"NVIDIA RTX 4060 8GB",brand:"nvidia",vram:8,vramType:"GDDR6",busWidth:128,bw:272,tdp:115,price:1980,priceUsed:1450,tier:"entry",perf:0.60},
+    // === AMD RX 9000 Series (RDNA 4) ===
+    {id:"rx9070xt",name:"AMD RX 9070 XT 16GB",brand:"amd",vram:16,vramType:"GDDR6",busWidth:256,bw:640,tdp:304,price:5200,priceUsed:null,tier:"high",perf:1.30},
+    {id:"rx9070",name:"AMD RX 9070 16GB",brand:"amd",vram:16,vramType:"GDDR6",busWidth:256,bw:576,tdp:245,price:4400,priceUsed:null,tier:"mid",perf:1.10},
+    {id:"rx9060xt16",name:"AMD RX 9060 XT 16GB",brand:"amd",vram:16,vramType:"GDDR6",busWidth:192,bw:432,tdp:200,price:3400,priceUsed:null,tier:"mid",perf:0.85},
+    {id:"rx9060xt8",name:"AMD RX 9060 XT 8GB",brand:"amd",vram:8,vramType:"GDDR6",busWidth:192,bw:432,tdp:200,price:2700,priceUsed:null,tier:"entry",perf:0.78},
+    {id:"rx9060",name:"AMD RX 9060 8GB",brand:"amd",vram:8,vramType:"GDDR6",busWidth:128,bw:288,tdp:150,price:2150,priceUsed:null,tier:"entry",perf:0.65},
+    // === AMD RX 7000 Series (RDNA 3) ===
+    {id:"rx7900xtx",name:"AMD RX 7900 XTX 24GB",brand:"amd",vram:24,vramType:"GDDR6",busWidth:384,bw:960,tdp:355,price:6500,priceUsed:4800,tier:"high",perf:1.75},
+    {id:"rx7900xt",name:"AMD RX 7900 XT 20GB",brand:"amd",vram:20,vramType:"GDDR6",busWidth:320,bw:800,tdp:300,price:5200,priceUsed:3800,tier:"high",perf:1.45},
+    {id:"rx7900gre",name:"AMD RX 7900 GRE 16GB",brand:"amd",vram:16,vramType:"GDDR6",busWidth:256,bw:576,tdp:260,price:3950,priceUsed:2800,tier:"mid",perf:1.10},
+    {id:"rx7800xt",name:"AMD RX 7800 XT 16GB",brand:"amd",vram:16,vramType:"GDDR6",busWidth:256,bw:624,tdp:263,price:3400,priceUsed:2450,tier:"mid",perf:1.05},
+    {id:"rx7700xt",name:"AMD RX 7700 XT 12GB",brand:"amd",vram:12,vramType:"GDDR6",busWidth:192,bw:432,tdp:245,price:2800,priceUsed:1950,tier:"mid",perf:0.82},
+    {id:"rx7600",name:"AMD RX 7600 8GB",brand:"amd",vram:8,vramType:"GDDR6",busWidth:128,bw:288,tdp:165,price:1700,priceUsed:1150,tier:"entry",perf:0.55},
+    // === Intel Arc (Battlemage) ===
+    {id:"arc-b580",name:"Intel Arc B580 12GB",brand:"intel",vram:12,vramType:"GDDR6",busWidth:192,bw:456,tdp:190,price:1899,priceUsed:null,tier:"entry",perf:0.62},
+    {id:"arc-b570",name:"Intel Arc B570 10GB",brand:"intel",vram:10,vramType:"GDDR6",busWidth:160,bw:380,tdp:150,price:1550,priceUsed:null,tier:"entry",perf:0.50},
+  ],
+
+  // ---- Motherboard (2025年7月京东/淘宝行情) ----
+  mobos: [
+    // === Intel LGA1851 (800系列芯片组) ===
+    {id:"b860m-d5",name:"华硕 PRIME B860M-K D5",socket:"LGA1851",chipset:"B860",ff:"mATX",ramType:"ddr5",ramSpeed:7200,vrm:"low",tdpMax:150,price:850,priceUsed:null,tier:"entry"},
+    {id:"b860m-d5-tuf",name:"华硕 TUF B860M-PLUS WiFi D5",socket:"LGA1851",chipset:"B860",ff:"mATX",ramType:"ddr5",ramSpeed:7600,vrm:"mid",tdpMax:220,price:1350,priceUsed:null,tier:"mid"},
+    {id:"z890-d5",name:"MSI MAG Z890 Tomahawk WiFi",socket:"LGA1851",chipset:"Z890",ff:"ATX",ramType:"ddr5",ramSpeed:8000,vrm:"high",tdpMax:350,price:2200,priceUsed:null,tier:"high"},
+    {id:"z890-d5-rog",name:"华硕 ROG STRIX Z890-A Gaming",socket:"LGA1851",chipset:"Z890",ff:"ATX",ramType:"ddr5",ramSpeed:8200,vrm:"high",tdpMax:380,price:2800,priceUsed:null,tier:"flagship"},
+    // === Intel LGA1700 (600/700系列) ===
+    {id:"h610m-d4",name:"华硕 PRIME H610M-A D4",socket:"LGA1700",chipset:"H610",ff:"mATX",ramType:"ddr4",ramSpeed:3200,vrm:"low",tdpMax:125,price:460,priceUsed:320,tier:"entry"},
+    {id:"b760m-d4",name:"MSI PRO B760M-G DDR4",socket:"LGA1700",chipset:"B760",ff:"mATX",ramType:"ddr4",ramSpeed:5333,vrm:"mid",tdpMax:180,price:650,priceUsed:450,tier:"entry"},
+    {id:"b760m-d5",name:"MSI MAG B760M Mortar WiFi D5",socket:"LGA1700",chipset:"B760",ff:"mATX",ramType:"ddr5",ramSpeed:7200,vrm:"mid",tdpMax:180,price:1020,priceUsed:720,tier:"mid"},
+    {id:"b760m-d5-tuf",name:"华硕 TUF B760M-PLUS WiFi D5",socket:"LGA1700",chipset:"B760",ff:"mATX",ramType:"ddr5",ramSpeed:7200,vrm:"mid",tdpMax:180,price:1100,priceUsed:780,tier:"mid"},
+    {id:"z790-d4",name:"MSI PRO Z790-P DDR4",socket:"LGA1700",chipset:"Z790",ff:"ATX",ramType:"ddr4",ramSpeed:5333,vrm:"high",tdpMax:300,price:1280,priceUsed:880,tier:"mid"},
+    {id:"z790-d5",name:"MSI MAG Z790 Tomahawk WiFi D5",socket:"LGA1700",chipset:"Z790",ff:"ATX",ramType:"ddr5",ramSpeed:7600,vrm:"high",tdpMax:350,price:1780,priceUsed:1250,tier:"high"},
+    {id:"z790-d5-rog",name:"华硕 ROG STRIX Z790-A Gaming D5",socket:"LGA1700",chipset:"Z790",ff:"ATX",ramType:"ddr5",ramSpeed:7800,vrm:"high",tdpMax:350,price:2350,priceUsed:1650,tier:"high"},
+    // === AMD AM5 (800系列芯片组, 2025) ===
+    {id:"b850m-d5",name:"华擎 B850M Pro-A WiFi",socket:"AM5",chipset:"B850",ff:"mATX",ramType:"ddr5",ramSpeed:7600,vrm:"mid",tdpMax:200,price:950,priceUsed:null,tier:"entry"},
+    {id:"b850m-d5-tuf",name:"华硕 TUF B850M-PLUS WiFi",socket:"AM5",chipset:"B850",ff:"mATX",ramType:"ddr5",ramSpeed:7800,vrm:"mid",tdpMax:220,price:1350,priceUsed:null,tier:"mid"},
+    {id:"b850-d5-aorus",name:"技嘉 B850 AORUS ELITE AX",socket:"AM5",chipset:"B850",ff:"ATX",ramType:"ddr5",ramSpeed:7800,vrm:"high",tdpMax:280,price:1680,priceUsed:null,tier:"high"},
+    {id:"x870-d5-tuf",name:"华硕 TUF X870-PLUS WiFi",socket:"AM5",chipset:"X870",ff:"ATX",ramType:"ddr5",ramSpeed:8000,vrm:"high",tdpMax:350,price:2200,priceUsed:null,tier:"high"},
+    {id:"x870e-d5-rog",name:"华硕 ROG STRIX X870E-E Gaming",socket:"AM5",chipset:"X870E",ff:"ATX",ramType:"ddr5",ramSpeed:8200,vrm:"high",tdpMax:400,price:3200,priceUsed:null,tier:"flagship"},
+    // === AMD AM5 (600系列) ===
+    {id:"a620m-d5",name:"华硕 PRIME A620M-K",socket:"AM5",chipset:"A620",ff:"mATX",ramType:"ddr5",ramSpeed:6400,vrm:"low",tdpMax:120,price:550,priceUsed:380,tier:"entry"},
+    {id:"b650m-d5",name:"MSI PRO B650M-A WiFi",socket:"AM5",chipset:"B650",ff:"mATX",ramType:"ddr5",ramSpeed:7200,vrm:"mid",tdpMax:180,price:850,priceUsed:580,tier:"mid"},
+    {id:"b650m-d5-tuf",name:"华硕 TUF B650M-PLUS WiFi",socket:"AM5",chipset:"B650",ff:"mATX",ramType:"ddr5",ramSpeed:7200,vrm:"mid",tdpMax:180,price:1020,priceUsed:720,tier:"mid"},
+    {id:"b650e-d5-rog",name:"华硕 ROG STRIX B650E-E Gaming",socket:"AM5",chipset:"B650E",ff:"ATX",ramType:"ddr5",ramSpeed:7600,vrm:"high",tdpMax:250,price:1600,priceUsed:1100,tier:"high"},
+    {id:"x670e-d5",name:"MSI MAG X670E Tomahawk WiFi",socket:"AM5",chipset:"X670E",ff:"ATX",ramType:"ddr5",ramSpeed:7800,vrm:"high",tdpMax:350,price:2100,priceUsed:1480,tier:"high"},
+    // === AMD AM4 ===
+    {id:"b450m-d4",name:"MSI B450M-A PRO MAX",socket:"AM4",chipset:"B450",ff:"mATX",ramType:"ddr4",ramSpeed:3200,vrm:"low",tdpMax:105,price:360,priceUsed:220,tier:"entry"},
+    {id:"b550m-d4",name:"MSI MAG B550M Mortar",socket:"AM4",chipset:"B550",ff:"mATX",ramType:"ddr4",ramSpeed:4400,vrm:"mid",tdpMax:150,price:580,priceUsed:380,tier:"mid"},
+  ],
+
+  // ---- Memory (2025年7月, DRAM大幅涨价) ----
+  rams: [
+    {id:"ddr4-16-3200",name:"金士顿 FURY DDR4 16GB (2×8)",type:"ddr4",capacity:16,speed:3200,price:250,priceUsed:160,tier:"entry"},
+    {id:"ddr4-32-3200",name:"金士顿 FURY DDR4 32GB (2×16)",type:"ddr4",capacity:32,speed:3200,price:450,priceUsed:300,tier:"entry"},
+    {id:"ddr4-32-3600",name:"芝奇 Ripjaws V DDR4 32GB (2×16)",type:"ddr4",capacity:32,speed:3600,price:500,priceUsed:350,tier:"mid"},
+    {id:"ddr4-64-3600",name:"芝奇 Ripjaws V DDR4 64GB (2×32)",type:"ddr4",capacity:64,speed:3600,price:900,priceUsed:600,tier:"high"},
+    {id:"ddr5-16-6000",name:"金士顿 FURY DDR5 16GB (2×8) 6000 CL30",type:"ddr5",capacity:16,speed:6000,price:550,priceUsed:380,tier:"entry"},
+    {id:"ddr5-32-5600",name:"金士顿 FURY DDR5 32GB (2×16) 5600",type:"ddr5",capacity:32,speed:5600,price:880,priceUsed:620,tier:"mid"},
+    {id:"ddr5-32-6000",name:"芝奇 Trident Z5 DDR5 32GB (2×16) 6000 CL30",type:"ddr5",capacity:32,speed:6000,price:999,priceUsed:720,tier:"mid",rec:"⭐甜点频率,CL30低延迟"},
+    {id:"ddr5-32-6400",name:"海盗船 复仇者 DDR5 32GB (2×16) 6400 CL32",type:"ddr5",capacity:32,speed:6400,price:1050,priceUsed:750,tier:"high"},
+    {id:"ddr5-32-6000-gw",name:"光威 弈系列 DDR5 32GB (2×16) 6000 长鑫",type:"ddr5",capacity:32,speed:6000,price:799,priceUsed:null,tier:"mid",rec:"💰国产性价比,比一线便宜20%"},
+    {id:"ddr5-48-6400",name:"金士顿 FURY Renegade DDR5 48GB (2×24) 6400",type:"ddr5",capacity:48,speed:6400,price:1300,priceUsed:900,tier:"high"},
+    {id:"ddr5-64-6000",name:"金士顿 FURY Beast DDR5 64GB (2×32) 6000",type:"ddr5",capacity:64,speed:6000,price:1600,priceUsed:1100,tier:"high"},
+    {id:"ddr5-32-7200",name:"芝奇 Trident Z5 RGB DDR5 32GB (2×16) 7200 CL34",type:"ddr5",capacity:32,speed:7200,price:1150,priceUsed:800,tier:"high"},
+    {id:"ddr5-32-8000",name:"芝奇 Trident Z5 Royal DDR5 32GB (2×16) 8000 CL38",type:"ddr5",capacity:32,speed:8000,price:1600,priceUsed:null,tier:"flagship"},
+    {id:"ddr5-96-6400",name:"海盗船 Vengeance DDR5 96GB (2×48) 6400",type:"ddr5",capacity:96,speed:6400,price:3000,priceUsed:null,tier:"flagship"},
+  ],
+
+  // ---- Storage (2025年7月京东/淘宝行情) ----
+  storages: [
+    {id:"nvme-1tb-ti7100",name:"致态 TiPlus7100 1TB NVMe Gen4",type:"nvme",capacity:1024,speed:"7000/6000 MB/s",price:1055,priceUsed:750,tier:"entry",rec:"⭐国产原厂"},
+    {id:"nvme-2tb-ti7100",name:"致态 TiPlus7100 2TB NVMe Gen4",type:"nvme",capacity:2048,speed:"7000/6000 MB/s",price:2000,priceUsed:1400,tier:"mid",rec:"⭐长江存储旗舰"},
+    {id:"nvme-1tb-990pro",name:"三星 990 PRO 1TB NVMe Gen4",type:"nvme",capacity:1024,speed:"7450/6900 MB/s",price:1330,priceUsed:900,tier:"mid"},
+    {id:"nvme-2tb-990pro",name:"三星 990 PRO 2TB NVMe Gen4",type:"nvme",capacity:2048,speed:"7450/6900 MB/s",price:2400,priceUsed:1700,tier:"high"},
+    {id:"nvme-1tb-sn850x",name:"WD SN7100 1TB NVMe Gen4 黑盘",type:"nvme",capacity:1024,speed:"7300/6300 MB/s",price:1060,priceUsed:720,tier:"mid"},
+    {id:"nvme-2tb-sn850x",name:"WD SN850X 2TB NVMe Gen4",type:"nvme",capacity:2048,speed:"7300/6600 MB/s",price:1740,priceUsed:1200,tier:"high"},
+    {id:"nvme-1tb-ti600",name:"致态 Ti600 1TB NVMe Gen4",type:"nvme",capacity:1024,speed:"7000/6000 MB/s",price:925,priceUsed:650,tier:"entry"},
+    {id:"nvme-2tb-nv3",name:"金士顿 NV3 2TB NVMe Gen4",type:"nvme",capacity:2048,speed:"6000/4000 MB/s",price:1735,priceUsed:1200,tier:"mid"},
+    {id:"nvme-1tb-nv3",name:"金士顿 NV3 1TB NVMe Gen4",type:"nvme",capacity:1024,speed:"6000/4000 MB/s",price:955,priceUsed:680,tier:"entry"},
+    {id:"sata-1tb-mx500",name:"英睿达 MX500 1TB SATA",type:"sata",capacity:1024,speed:"560/510 MB/s",price:350,priceUsed:220,tier:"entry"},
+    {id:"sata-2tb-mx500",name:"英睿达 MX500 2TB SATA",type:"sata",capacity:2048,speed:"560/510 MB/s",price:680,priceUsed:450,tier:"entry"},
+  ],
+
+  // ---- PSU (2025年7月京东行情, 含ATX 3.1/PCIe 5.1新品) ----
+  psus: [
+    {id:"psu-550-bz",name:"酷冷至尊 MWE 550W 铜牌 (非模组)",watt:550,cert:"铜牌",modular:"非模组",price:260,priceUsed:160,tier:"entry",atx31:false},
+    {id:"psu-650-gf",name:"振华 Leadex III 650W 金牌 (全模组)",watt:650,cert:"金牌",modular:"全模组",price:520,priceUsed:350,tier:"mid",atx31:false},
+    {id:"psu-750-sea",name:"海韵 Focus GX-750 金牌 ATX3.1 (全模组)",watt:750,cert:"金牌",modular:"全模组",price:720,priceUsed:null,tier:"mid",atx31:true},
+    {id:"psu-850-sea",name:"海韵 Focus GX-850 金牌 ATX3.1 (全模组)",watt:850,cert:"金牌",modular:"全模组",price:850,priceUsed:null,tier:"high",atx31:true},
+    {id:"psu-850-amp",name:"追风者 AMP GH 850W 白金牌 ATX3.1 (全模组)",watt:850,cert:"白金牌",modular:"全模组",price:980,priceUsed:null,tier:"high",atx31:true},
+    {id:"psu-1000-sea",name:"海韵 Focus GX-1000 金牌 ATX3.1 (全模组)",watt:1000,cert:"金牌",modular:"全模组",price:1150,priceUsed:null,tier:"high",atx31:true},
+    {id:"psu-1200-sea",name:"海韵 Vertex GX-1200 金牌 ATX3.1 (全模组)",watt:1200,cert:"金牌",modular:"全模组",price:1750,priceUsed:null,tier:"flagship",atx31:true},
+    {id:"psu-1600-rog",name:"华硕 ROG Thor 1600W 白金牌 ATX3.1 (全模组)",watt:1600,cert:"白金牌",modular:"全模组",price:3200,priceUsed:null,tier:"flagship",atx31:true},
+  ],
+
+  // ---- Case (2025年7月京东行情) ----
+  cases: [
+    {id:"case-d31",name:"乔思伯 D31 Mesh mATX",ff:"mATX",gpuLen:360,coolerH:168,price:320,priceUsed:200,tier:"entry"},
+    {id:"case-ap201",name:"华硕 AP201 mATX",ff:"mATX",gpuLen:338,coolerH:170,price:420,priceUsed:280,tier:"entry"},
+    {id:"case-l216",name:"联力 Lancool 216 ATX",ff:"ATX",gpuLen:392,coolerH:180,price:499,priceUsed:350,tier:"mid"},
+    {id:"case-h5flow",name:"NZXT H5 Flow (2024) ATX",ff:"ATX",gpuLen:410,coolerH:165,price:580,priceUsed:400,tier:"mid"},
+    {id:"case-h6flow",name:"NZXT H6 Flow ATX 双腔",ff:"ATX",gpuLen:365,coolerH:163,price:750,priceUsed:null,tier:"mid"},
+    {id:"case-north",name:"Fractal North ATX",ff:"ATX",gpuLen:355,coolerH:175,price:950,priceUsed:650,tier:"high"},
+    {id:"case-o11d",name:"联力 O11 Dynamic EVO ATX",ff:"ATX",gpuLen:426,coolerH:167,price:1100,priceUsed:750,tier:"high"},
+    {id:"case-o11d-xl",name:"联力 O11D EVO XL ATX",ff:"ATX",gpuLen:470,coolerH:180,price:1580,priceUsed:null,tier:"flagship"},
+  ],
+
+  // ---- Cooler (2025年7月京东行情) ----
+  coolers: [
+    {id:"cool-ak400",name:"九州风神 AK400 单塔风冷",type:"air",tdpMax:220,price:120,priceUsed:70,tier:"entry"},
+    {id:"cool-pa120",name:"利民 Peerless Assassin 120 SE 双塔风冷",type:"air",tdpMax:260,price:155,priceUsed:100,tier:"entry"},
+    {id:"cool-ps120",name:"利民 Phantom Spirit 120 SE 双塔风冷",type:"air",tdpMax:280,price:195,priceUsed:130,tier:"mid"},
+    {id:"cool-ak620",name:"九州风神 AK620 双塔风冷",type:"air",tdpMax:260,price:280,priceUsed:180,tier:"mid"},
+    {id:"cool-d15g2",name:"猫头鹰 NH-D15 G2 旗舰双塔风冷",type:"air",tdpMax:320,price:620,priceUsed:null,tier:"high"},
+    {id:"cool-a240",name:"利民 Frozen Edge 240 水冷",type:"aio240",tdpMax:280,price:280,priceUsed:180,tier:"entry"},
+    {id:"cool-a360-pa",name:"利民 Frozen Infinity 360 水冷",type:"aio360",tdpMax:350,price:380,priceUsed:250,tier:"mid"},
+    {id:"cool-a360-galahad",name:"联力 Galahad II Trinity 360 水冷",type:"aio360",tdpMax:380,price:850,priceUsed:550,tier:"high"},
+    {id:"cool-a360-ryujin",name:"华硕 ROG Ryujin III 360 ARGB 水冷",type:"aio360",tdpMax:400,price:1580,priceUsed:null,tier:"flagship"},
+  ]
+};
+
+// ---- Game baseline FPS (1440p, RTX 4070 = ref) ----
+const GAME_BASELINE = {
+  cp2077:    {name:"🎮 赛博朋克 2077",     preset:"高画质 (DLSS 质量)",   fhd:1.50, qhd:72,  uhd:0.55},
+  blackmyth: {name:"🐵 黑神话：悟空",      preset:"高画质 (DLSS 性能)",   fhd:1.48, qhd:55,  uhd:0.52},
+  palworld:  {name:"🦙 幻兽帕鲁",          preset:"高画质",               fhd:1.52, qhd:88,  uhd:0.56},
+  cs2:       {name:"🔫 CS2 (CS:GO)",        preset:"竞技设置 (低画质)",    fhd:1.55, qhd:310, uhd:0.58},
+  valorant:  {name:"🎯 瓦罗兰特",           preset:"竞技设置 (低画质)",    fhd:1.58, qhd:430, uhd:0.60},
+  pubg:      {name:"🍗 PUBG",              preset:"竞技设置 (三极致)",    fhd:1.50, qhd:175, uhd:0.54},
+  warzone:   {name:"🪂 使命召唤：战区",     preset:"竞技设置",             fhd:1.53, qhd:125, uhd:0.55},
+};
+
+// ---- AI model requirements (2026年7月最新) ----
+// Quantization-aware VRAM estimates. Each model has 6 quantization levels.
+// For MoE models, active params noted; VRAM based on total params (all experts loaded).
+// Format: { name, family, params_billion, activeB (MoE only), q4/q3/q2/iq3/q6/q8 (GB VRAM), tokPerGB }
+const AI_MODELS = [
+  // === DeepSeek 系列 (2026) ===
+  {name:"DeepSeek V4-Flash (MoE)",       family:"DeepSeek", params:284, activeB:13,  q4:160, q3:115, q2:85,  iq3:102, q6:208, q8:290, tokPerGB:0.55},
+  {name:"DeepSeek V4-Pro (MoE)",         family:"DeepSeek", params:1600,activeB:49,  q4:900, q3:650, q2:480, iq3:580, q6:1170,q8:1660,tokPerGB:0.1},
+  {name:"DeepSeek V3.2 (MoE)",           family:"DeepSeek", params:685, activeB:37,  q4:390, q3:280, q2:205, iq3:250, q6:500, q8:700, tokPerGB:0.25},
+  {name:"DeepSeek-R1 7B (Distill)",      family:"DeepSeek", params:7,   activeB:null,q4:4.3, q3:3.1, q2:2.2, iq3:2.8,  q6:5.7, q8:7.5, tokPerGB:17},
+  {name:"DeepSeek-R1 14B (Distill)",     family:"DeepSeek", params:14,  activeB:null,q4:8.5, q3:6.2, q2:4.3, iq3:5.5,  q6:11,  q8:15,  tokPerGB:8.5},
+  {name:"DeepSeek-R1 32B (Distill)",     family:"DeepSeek", params:32,  activeB:null,q4:18.5,q3:13.5,q2:9.5, iq3:12,   q6:24,  q8:33,  tokPerGB:3.8},
+  {name:"DeepSeek-Coder V2 (MoE 16B)",   family:"DeepSeek", params:236, activeB:21,  q4:133, q3:95,  q2:70,  iq3:85,   q6:173, q8:240, tokPerGB:0.7},
+  // === Qwen 3.5 系列 (2026.02) ===
+  {name:"Qwen 3.5 0.8B",                 family:"Qwen 3.5",params:0.8, activeB:null,q4:0.5, q3:0.4, q2:0.28,iq3:0.35, q6:0.7, q8:0.9, tokPerGB:200},
+  {name:"Qwen 3.5 2B",                   family:"Qwen 3.5",params:2,   activeB:null,q4:1.3, q3:0.9, q2:0.65,iq3:0.8,  q6:1.7, q8:2.2, tokPerGB:75},
+  {name:"Qwen 3.5 4B",                   family:"Qwen 3.5",params:4,   activeB:null,q4:2.5, q3:1.8, q2:1.3, iq3:1.6,  q6:3.3, q8:4.3, tokPerGB:38},
+  {name:"Qwen 3.5 9B",                   family:"Qwen 3.5",params:9,   activeB:null,q4:5.5, q3:4.0, q2:2.8, iq3:3.6,  q6:7.3, q8:9.6, tokPerGB:13},
+  {name:"Qwen 3.5 27B",                  family:"Qwen 3.5",params:27,  activeB:null,q4:15.5,q3:11.5,q2:8.2, iq3:10.2, q6:20,  q8:28,  tokPerGB:4.5},
+  {name:"Qwen 3.5 35B-A3B (MoE)",        family:"Qwen 3.5",params:35,  activeB:3,   q4:20,  q3:14.5,q2:10.5,iq3:13,   q6:26,  q8:36,  tokPerGB:3.5},
+  {name:"Qwen 3.5 122B-A10B (MoE)",      family:"Qwen 3.5",params:122, activeB:10,  q4:69,  q3:50,  q2:36,  iq3:44,   q6:89,  q8:126, tokPerGB:1.1},
+  {name:"Qwen 3.5 397B-A17B (MoE)",      family:"Qwen 3.5",params:397, activeB:17,  q4:223, q3:160, q2:118, iq3:143,  q6:290, q8:410, tokPerGB:0.35},
+  // === Qwen 3 系列 (2025.04) ===
+  {name:"Qwen 3 0.6B",                   family:"Qwen 3",  params:0.6, activeB:null,q4:0.4, q3:0.3, q2:0.2, iq3:0.25, q6:0.45,q8:0.6, tokPerGB:200},
+  {name:"Qwen 3 1.7B",                   family:"Qwen 3",  params:1.7, activeB:null,q4:1.1, q3:0.8, q2:0.55,iq3:0.7,  q6:1.4, q8:1.9, tokPerGB:90},
+  {name:"Qwen 3 4B",                     family:"Qwen 3",  params:4,   activeB:null,q4:2.5, q3:1.8, q2:1.3, iq3:1.6,  q6:3.3, q8:4.3, tokPerGB:38},
+  {name:"Qwen 3 8B",                     family:"Qwen 3",  params:8,   activeB:null,q4:5.0, q3:3.6, q2:2.5, iq3:3.2,  q6:6.5, q8:8.5, tokPerGB:15},
+  {name:"Qwen 3 14B",                    family:"Qwen 3",  params:14,  activeB:null,q4:8.5, q3:6.2, q2:4.3, iq3:5.5,  q6:11,  q8:15,  tokPerGB:8.5},
+  {name:"Qwen 3 32B",                    family:"Qwen 3",  params:32,  activeB:null,q4:18.5,q3:13.5,q2:9.5, iq3:12,   q6:24,  q8:33,  tokPerGB:3.8},
+  {name:"Qwen 3 30B-A3B (MoE)",          family:"Qwen 3",  params:30,  activeB:3,   q4:17,  q3:12.5,q2:9,   iq3:11,   q6:22,  q8:31,  tokPerGB:4.2},
+  {name:"Qwen 3 235B-A22B (MoE)",        family:"Qwen 3",  params:235, activeB:22,  q4:132, q3:95,  q2:70,  iq3:85,   q6:172, q8:242, tokPerGB:0.6},
+  {name:"Qwen 3 Coder 480B-A35B (MoE)",  family:"Qwen 3",  params:480, activeB:35,  q4:270, q3:195, q2:143, iq3:173,  q6:350, q8:495, tokPerGB:0.3},
+  // === Qwen 2.5 系列 (保留热门) ===
+  {name:"Qwen 2.5 7B",                   family:"Qwen 2.5",params:7,   activeB:null,q4:4.3, q3:3.1, q2:2.2, iq3:2.8,  q6:5.7, q8:7.5, tokPerGB:17},
+  {name:"Qwen 2.5 14B",                  family:"Qwen 2.5",params:14,  activeB:null,q4:8.5, q3:6.2, q2:4.3, iq3:5.5,  q6:11,  q8:15,  tokPerGB:8.5},
+  {name:"Qwen 2.5 32B",                  family:"Qwen 2.5",params:32,  activeB:null,q4:18.5,q3:13.5,q2:9.5, iq3:12,   q6:24,  q8:33,  tokPerGB:3.8},
+  {name:"Qwen 2.5 72B",                  family:"Qwen 2.5",params:72,  activeB:null,q4:42,  q3:31,  q2:22,  iq3:28,   q6:55,  q8:75,  tokPerGB:1.7},
+  // === Llama 3.x 系列 ===
+  {name:"Llama 3.2 3B",                  family:"Llama",   params:3,   activeB:null,q4:1.9, q3:1.4, q2:0.9, iq3:1.2,  q6:2.5, q8:3.2, tokPerGB:40},
+  {name:"Llama 3.1 8B",                  family:"Llama",   params:8,   activeB:null,q4:5.0, q3:3.6, q2:2.5, iq3:3.2,  q6:6.5, q8:8.5, tokPerGB:15},
+  {name:"Llama 3.1 70B",                 family:"Llama",   params:70,  activeB:null,q4:42,  q3:30,  q2:22,  iq3:27,   q6:54,  q8:72,  tokPerGB:1.8},
+  {name:"Llama 3.1 405B",                family:"Llama",   params:405, activeB:null,q4:230, q3:170, q2:120, iq3:155,  q6:295, q8:420, tokPerGB:0.3},
+  // === Mistral 系列 ===
+  {name:"Mistral 7B",                    family:"Mistral", params:7,   activeB:null,q4:4.3, q3:3.1, q2:2.2, iq3:2.8,  q6:5.7, q8:7.5, tokPerGB:17},
+  {name:"Mistral Nemo 12B",              family:"Mistral", params:12,  activeB:null,q4:7.2, q3:5.2, q2:3.7, iq3:4.7,  q6:9.5, q8:12.5,tokPerGB:10},
+  {name:"Mixtral 8×7B (MoE)",            family:"Mistral", params:47,  activeB:13,  q4:28,  q3:20,  q2:15,  iq3:18,   q6:36,  q8:48,  tokPerGB:2.7},
+  // === Phi-4 ===
+  {name:"Phi-4 3.8B",                    family:"Phi-4",   params:3.8, activeB:null,q4:2.4, q3:1.7, q2:1.2, iq3:1.5,  q6:3.1, q8:4.1, tokPerGB:31},
+  {name:"Phi-4 7B",                      family:"Phi-4",   params:7,   activeB:null,q4:4.3, q3:3.1, q2:2.2, iq3:2.8,  q6:5.7, q8:7.5, tokPerGB:17},
+  {name:"Phi-4 14B",                     family:"Phi-4",   params:14,  activeB:null,q4:8.5, q3:6.2, q2:4.3, iq3:5.5,  q6:11,  q8:15,  tokPerGB:8.5},
+  // === Gemma 3 ===
+  {name:"Gemma 3 1B",                    family:"Gemma",   params:1,   activeB:null,q4:0.6, q3:0.5, q2:0.35,iq3:0.45, q6:0.9, q8:1.1, tokPerGB:120},
+  {name:"Gemma 3 4B",                    family:"Gemma",   params:4,   activeB:null,q4:2.5, q3:1.8, q2:1.3, iq3:1.6,  q6:3.3, q8:4.3, tokPerGB:38},
+  {name:"Gemma 3 12B",                   family:"Gemma",   params:12,  activeB:null,q4:7.2, q3:5.2, q2:3.7, iq3:4.7,  q6:9.5, q8:12.5,tokPerGB:10},
+  {name:"Gemma 3 27B",                   family:"Gemma",   params:27,  activeB:null,q4:15.5,q3:11.5,q2:8.2, iq3:10.2, q6:20,  q8:28,  tokPerGB:4.5},
+  // === Yi ===
+  {name:"Yi 1.5 9B",                     family:"Yi",      params:9,   activeB:null,q4:5.5, q3:4.0, q2:2.8, iq3:3.6,  q6:7.3, q8:9.6, tokPerGB:13},
+  {name:"Yi 1.5 34B",                    family:"Yi",      params:34,  activeB:null,q4:19.5,q3:14.5,q2:10,  iq3:13,   q6:25,  q8:35,  tokPerGB:3.5},
+];
+
+// Quantization level display info
+const QUANT_LEVELS = [
+  {key:'q2',  label:'Q2_K',    desc:'极致压缩',       color:'#f85149', stars:1},
+  {key:'iq3', label:'IQ3_XXS', desc:'极限压缩',       color:'#f0883e', stars:2},
+  {key:'q3',  label:'Q3_K_M',  desc:'高压缩',         color:'#d2991d', stars:3},
+  {key:'q4',  label:'Q4_K_M',  desc:'⭐推荐平衡',     color:'#3fb950', stars:5},
+  {key:'q6',  label:'Q6_K',    desc:'高质量',         color:'#58a6ff', stars:4},
+  {key:'q8',  label:'Q8_0',    desc:'近乎完美',       color:'#a371f7', stars:3},
+];
+
+// =====================================================================
+// DATA FETCH & CACHE — 启动时自动加载最新价格
+// =====================================================================
+const PRICE_CACHE_KEY = 'pc_builder_prices_v2';
+const PRICE_CACHE_TIME = 3600000; // 1小时缓存
+let pricesUpdateTime = null;
+
+async function loadPrices() {
+  // 总是从 prices.json 加载（IC交易网权威数据）
+  try {
+    const resp = await fetch('prices.json', { cache: 'no-cache' });
+    if (resp.ok) {
+      const data = await resp.json();
+      mergeStaticPrices(data);
+      localStorage.setItem(PRICE_CACHE_KEY, JSON.stringify({ ts: Date.now() }));
+      pricesUpdateTime = data.updated || new Date().toISOString();
+      console.log('✅ 价格已加载 (IC交易网)');
+      renderAll();
+      return;
+    }
+  } catch(e) { console.log('⚠️ 使用内置数据: ' + e.message); }
+}
+
+// 合并服务器实时抓取数据 (dram.com.cn IC交易网)
+function mergeLivePrices(results) {
+  if (!results?.dram) return;
+  const d = results.dram;
+  const updated = [];
+
+  // 所有 ¥ 定价产品 (SSD + 内存条 + CPU + HDD)
+  const allCNY = [...(d.ssd || [])];
+
+  // === 内存条匹配 (IC交易网 ¥) ===
+  const memItems = allCNY.filter(s => s.name.includes('DDR'));
+  memItems.forEach(s => {
+    const n = s.name.toLowerCase();
+    HARDWARE.rams.forEach(r => {
+      const rn = r.name.toLowerCase();
+      // Kingston 野兽 32GB DDR5
+      if (n.includes('kingston') && n.includes('野兽32gb') && r.id === 'ddr5-32-5600') r.price = s.price;
+      // Kingston 野兽 16GB DDR5
+      if (n.includes('kingston') && n.includes('野兽16gb') && r.id === 'ddr5-16-6000') r.price = s.price;
+      // Samsung 16GB DDR5
+      if (n.includes('samsung') && n.includes('ddr5') && r.id === 'ddr5-16-5600') r.price = s.price;
+      // Kingston 16GB DDR4
+      if (n.includes('kingston') && n.includes('ddr4') && n.includes('16gb') && r.id === 'ddr4-16-3200') r.price = s.price;
+      // 海盗船 DDR5 16GB
+      if (n.includes('海盗船') && n.includes('ddr5') && n.includes('16gb') && r.id === 'ddr5-16-corsair') r.price = s.price;
+      // 芝奇 16GBx2 6400
+      if (n.includes('芝奇') && n.includes('16gbx2') && r.id === 'ddr5-32-6000-cl30') r.price = s.price;
+      // 芝奇 32GBx2 6400
+      if (n.includes('芝奇') && n.includes('32gbx2') && r.id === 'ddr5-64-6000') r.price = s.price;
+      // 金百达
+      if (n.includes('金百达') && r.id === 'ddr5-32-6000-gw') r.price = s.price;
+      // 威刚 ADATA DDR5
+      if (n.includes('adata') && n.includes('ddr5') && r.id === 'ddr5-16-adata') r.price = s.price;
+      // 宏基 64GB
+      if (n.includes('宏基') && r.id === 'ddr5-64-6000-acer') r.price = s.price;
+      // 海盗船 DDR5 32GB
+      if (n.includes('海盗船') && n.includes('ddr5') && n.includes('16gb') && r.id === 'ddr5-32-6400') r.price = Math.round(s.price * 2);
+      // Micron
+      if (n.includes('micron') && r.id === 'ddr5-16-micron') r.price = s.price;
+    });
+  });
+  if (memItems.length) updated.push(`内存条: ${memItems.length}款`);
+
+  // === SSD 匹配 ===
+  const ssdItems = allCNY.filter(s => !s.name.includes('DDR') && (s.name.includes('SSD') || s.name.includes('NV') || s.name.includes('M.2') || s.name.includes('SATA') || s.name.includes('SN') || s.name.includes('Ti') || s.name.includes('990') || s.name.includes('NV3')));
+  ssdItems.forEach(s => {
+    const n = s.name.toLowerCase();
+    HARDWARE.storages.forEach(hw => {
+      const hn = hw.name.toLowerCase();
+      if (n.includes('990 pro') && n.includes('2tb') && hn.includes('990 pro') && hw.capacity === 2048) hw.price = s.price;
+      else if (n.includes('990 pro') && n.includes('1tb') && hn.includes('990 pro') && hw.capacity === 1024) hw.price = s.price;
+      else if (n.includes('tiplus7100') && n.includes('1tb') && hn.includes('tiplus7100') && hw.capacity === 1024) hw.price = s.price;
+      else if (n.includes('ti600') && hn.includes('ti600') && hw.capacity === 1024) hw.price = s.price;
+      else if (n.includes('nv3') && n.includes('2tb') && hn.includes('nv3') && hw.capacity === 2048) hw.price = s.price;
+      else if (n.includes('nv3') && n.includes('1tb') && hn.includes('nv3') && hw.capacity === 1024) hw.price = s.price;
+      else if (n.includes('sn7100') && hn.includes('sn7100')) hw.price = s.price;
+      else if (n.includes('sn850x') && hn.includes('sn850x')) hw.price = s.price;
+    });
+  });
+  if (ssdItems.length) updated.push(`SSD: ${ssdItems.length}款`);
+
+  if (updated.length) console.log('📡 IC交易网实时:', updated.join(', '));
+}
+
+// 手动刷新 — 从 prices.json 重新加载 + 尝试服务器实时抓取
+async function refreshPrices() {
+  const btn = document.getElementById('refresh-btn');
+  btn.textContent = '⏳ 刷新中...';
+  btn.disabled = true;
+
+  // 1. 重载 prices.json
+  try {
+    const resp = await fetch('prices.json?t=' + Date.now(), { cache: 'no-cache' });
+    if (resp.ok) {
+      const data = await resp.json();
+      mergeStaticPrices(data);
+      pricesUpdateTime = data.updated || new Date().toISOString();
+      console.log('✅ prices.json 已重载');
+    }
+  } catch(e) { console.log('⚠️ prices.json 重载失败'); }
+
+  // 2. 如果有服务器，尝试实时抓取
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    try {
+      const resp = await fetch('/api/prices/all', { signal: AbortSignal.timeout(60000) });
+      if (resp.ok) {
+        const data = await resp.json();
+        mergeLivePrices(data.results);
+        console.log('✅ 服务器实时抓取完成');
+      }
+    } catch(e) { console.log('⚠️ 服务器抓取失败: ' + e.message); }
+  }
+
+  renderAll();
+  btn.textContent = '🔄 刷新价格';
+  btn.disabled = false;
+}
+
+// 在页面加载时显示刷新按钮并注明数据源
+function showRefreshButton() {
+  const btn = document.getElementById('refresh-btn');
+  btn.style.display = 'inline';
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    btn.textContent = '🔄 实时抓取';
+  } else {
+    btn.textContent = '🔄 刷新';
+  }
+}
+
+// 合并静态 JSON 价格
+function mergeStaticPrices(data) {
+  ['cpus','gpus','mobos','rams','storages','psus','cases','coolers'].forEach(cat => {
+    if (!data[cat]) return;
+    data[cat].forEach(ext => {
+      const existing = HARDWARE[cat].find(h => h.id === ext.id);
+      if (existing) {
+        existing.price = ext.price;
+        existing.priceUsed = ext.priceUsed;
+      }
+    });
+  });
+}
+
+// =====================================================================
+// PRICE HISTORY GENERATOR — 模拟30天价格走势
+// =====================================================================
+function generatePriceHistory(basePrice, volatility = 0.015, days = 30) {
+  const history = [];
+  let price = basePrice;
+  const now = new Date();
+  for (let i = days; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const dateStr = d.toISOString().slice(0, 10);
+    const change = (Math.random() - 0.48) * volatility * price;
+    price = Math.round(Math.max(price * 0.85, Math.min(price * 1.15, price + change)));
+    history.push({ date: dateStr, price });
+  }
+  return history;
+}
+
+// Cache for generated histories
+const priceHistoryCache = {};
+
+function getPriceHistory(itemId, category) {
+  const cacheKey = category + '_' + itemId;
+  if (priceHistoryCache[cacheKey]) return priceHistoryCache[cacheKey];
+  const item = HARDWARE[category]?.find(h => h.id === itemId);
+  if (!item) return [];
+  const history = generatePriceHistory(item.price, category === 'gpus' ? 0.02 : 0.012);
+  priceHistoryCache[cacheKey] = history;
+  return history;
+}
+
+// =====================================================================
+// PRICE CHART — Canvas 价格走势图
+// =====================================================================
+let chartState = { product1: null, product2: null, days: 30, cat1: null, cat2: null };
+
+function drawPriceChart(canvasId, product1, cat1, product2, cat2, days) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+  const W = rect.width, H = rect.height;
+  const pad = { top: 20, right: 20, bottom: 40, left: 60 };
+  const pw = W - pad.left - pad.right;
+  const ph = H - pad.top - pad.bottom;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Background
+  ctx.fillStyle = '#161b22';
+  ctx.fillRect(0, 0, W, H);
+
+  // Get data
+  const data1 = product1 ? getPriceHistory(product1, cat1).slice(-days) : [];
+  const data2 = product2 ? getPriceHistory(product2, cat2).slice(-days) : [];
+  const allData = [...data1, ...data2];
+  if (!allData.length) {
+    ctx.fillStyle = '#8b949e';
+    ctx.font = '14px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('请选择产品进行对比', W/2, H/2);
+    return;
+  }
+
+  const prices = allData.map(d => d.price);
+  let yMin = Math.min(...prices) * 0.9;
+  let yMax = Math.max(...prices) * 1.1;
+  const yRange = yMax - yMin || 1;
+
+  function xOf(i) { return pad.left + (i / (days - 1 || 1)) * pw; }
+  function yOf(p) { return pad.top + (1 - (p - yMin) / yRange) * ph; }
+
+  // Grid lines
+  ctx.strokeStyle = '#21262d';
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + (i / 4) * ph;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+    const val = Math.round(yMax - (i / 4) * yRange);
+    ctx.fillStyle = '#8b949e';
+    ctx.font = '10px monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText('¥' + val.toLocaleString(), pad.left - 6, y + 4);
+  }
+
+  // X-axis labels
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#8b949e';
+  ctx.font = '9px monospace';
+  const step = Math.max(1, Math.floor(days / 6));
+  for (let i = 0; i < days; i += step) {
+    if (data1[i] || data2[i]) {
+      const d = data1[i] || data2[i];
+      ctx.fillText(d.date.slice(5), xOf(i), H - pad.bottom + 16);
+    }
+  }
+
+  // Draw lines
+  function drawLine(data, color, dashed) {
+    if (!data.length) return;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    if (dashed) ctx.setLineDash([5, 3]);
+    else ctx.setLineDash([]);
+    ctx.beginPath();
+    data.forEach((d, i) => {
+      const x = xOf(i), y = yOf(d.price);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Dots
+    data.forEach((d, i) => {
+      if (i % Math.max(1, Math.floor(days / 10)) === 0 || i === data.length - 1) {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(xOf(i), yOf(d.price), 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+  }
+
+  if (data1.length) drawLine(data1, '#58a6ff', false);
+  if (data2.length) drawLine(data2, '#3fb950', true);
+
+  // Legend
+  const item1 = product1 ? HARDWARE[cat1]?.find(h => h.id === product1) : null;
+  const item2 = product2 ? HARDWARE[cat2]?.find(h => h.id === product2) : null;
+  let legendY = pad.top + 4;
+  ctx.font = '11px sans-serif';
+  if (item1) {
+    ctx.fillStyle = '#58a6ff';
+    ctx.textAlign = 'left';
+    ctx.fillText('━ ' + item1.name.slice(0, 25), pad.left + 4, legendY);
+    legendY += 16;
+  }
+  if (item2) {
+    ctx.fillStyle = '#3fb950';
+    ctx.fillText('┅ ' + item2.name.slice(0, 25), pad.left + 4, legendY);
+  }
+}
+
+function updateChart() {
+  drawPriceChart('price-chart', chartState.product1, chartState.cat1, chartState.product2, chartState.cat2, chartState.days);
+}
+
+// =====================================================================
+// STATE
+// =====================================================================
+let state = {
+  cpu: null, gpu: null, mobo: null, ram: null,
+  storage: null, psu: null, case: null, cooler: null,
+  cpuBrand: 'all', cpuTier: 'all',
+  gpuBrand: 'all', gpuTier: 'all',
+  moboTier: 'all', moboFF: 'all',
+  ramCap: 'all', ramTier: 'all',
+  storageType: 'all', storageTier: 'all',
+  psuTier: 'all',
+  caseTier: 'all',
+  coolerType: 'all', coolerTier: 'all',
+};
+
+// =====================================================================
+// RENDER ENGINE
+// =====================================================================
+function getFiltered(parts, key, section) {
+  let list = [...HARDWARE[parts]];
+  const s = section;
+
+  // ---- CPU ----
+  if (parts === 'cpus') {
+    if (state.cpuBrand !== 'all') list = list.filter(c => c.brand === state.cpuBrand);
+    if (state.cpuTier !== 'all') list = list.filter(c => c.tier === state.cpuTier);
+  }
+
+  // ---- GPU ----
+  if (parts === 'gpus') {
+    if (state.gpuBrand !== 'all') list = list.filter(g => g.brand === state.gpuBrand);
+    if (state.gpuTier !== 'all') list = list.filter(g => g.tier === state.gpuTier);
+  }
+
+  // ---- Motherboard (compatibility) ----
+  if (parts === 'mobos') {
+    if (state.moboTier !== 'all') list = list.filter(m => m.tier === state.moboTier);
+    if (state.moboFF !== 'all') list = list.filter(m => m.ff === state.moboFF);
+    // CPU compatibility: SHOW ALL, mark compatible/incompatible
+    if (state.cpu) {
+      const cpu = state.cpu;
+      list.forEach(m => {
+        m._compat = (m.socket === cpu.socket)
+          && !(cpu.tdp > 125 && m.vrm === 'low')
+          && !(cpu.tdp > 180 && m.vrm !== 'high')
+          && !(cpu.tier === 'flagship' && m.tdpMax < 200);
+        // Build tooltip for incompatible
+        if (!m._compat) {
+          const reasons = [];
+          if (m.socket !== cpu.socket) reasons.push(`插槽不匹配 (需${cpu.socket})`);
+          if (cpu.tdp > m.tdpMax) reasons.push(`供电不足 (CPU ${cpu.tdp}W > 主板${m.tdpMax}W)`);
+          m._tooltip = reasons.join('；');
+        }
+      });
+    } else {
+      list.forEach(m => { m._compat = true; m._tooltip = ''; });
+    }
+  }
+
+  // ---- RAM (motherboard compatibility) ----
+  if (parts === 'rams') {
+    if (state.ramCap !== 'all') list = list.filter(r => r.capacity === parseInt(state.ramCap));
+    if (state.ramTier !== 'all') list = list.filter(r => r.tier === state.ramTier);
+    // Show all RAM, mark compatibility based on mobo
+    if (state.mobo) {
+      const need = state.mobo.ramType;
+      list.forEach(r => {
+        r._compat = r.type === need;
+        if (!r._compat) r._tooltip = `需要 ${need.toUpperCase()} 内存 (当前${r.type.toUpperCase()})`;
+      });
+    } else {
+      list.forEach(r => { r._compat = true; r._tooltip = ''; });
+    }
+  }
+
+  // ---- Storage ----
+  if (parts === 'storages') {
+    if (state.storageType !== 'all') list = list.filter(s => s.type === state.storageType);
+    if (state.storageTier !== 'all') list = list.filter(s => s.tier === state.storageTier);
+  }
+
+  // ---- PSU (wattage recommendation) ----
+  if (parts === 'psus') {
+    if (state.psuTier !== 'all') list = list.filter(p => p.tier === state.psuTier);
+    // Calculate recommended wattage
+    const cpuTdp = state.cpu ? state.cpu.tdp : 0;
+    const gpuTdp = state.gpu ? state.gpu.tdp : 0;
+    const recWatt = Math.ceil(((cpuTdp + gpuTdp) * 1.5 + 100) / 50) * 50;
+    list.forEach(p => { p._recWatt = recWatt; p._enough = p.watt >= recWatt; });
+  }
+
+  // ---- Case (mobo FF + GPU length) ----
+  if (parts === 'cases') {
+    if (state.caseTier !== 'all') list = list.filter(c => c.tier === state.caseTier);
+    list.forEach(c => {
+      c._compat = true;
+      const issues = [];
+      if (state.mobo) {
+        // ATX case fits all, mATX case only fits mATX/ITX
+        if (c.ff === 'mATX' && state.mobo.ff === 'ATX') {
+          c._compat = false;
+          issues.push('机箱仅支持mATX(主板为ATX)');
+        }
+      }
+      c._tooltip = issues.join('；');
+    });
+  }
+
+  // ---- Cooler (CPU TDP) ----
+  if (parts === 'coolers') {
+    if (state.coolerType !== 'all') list = list.filter(c => c.type === state.coolerType);
+    if (state.coolerTier !== 'all') list = list.filter(c => c.tier === state.coolerTier);
+    if (state.cpu) {
+      list.forEach(c => { c._enoughTdp = c.tdpMax >= state.cpu.tdp; });
+    } else {
+      list.forEach(c => { c._enoughTdp = true; });
+    }
+  }
+
+  return list;
+}
+
+function renderCompCard(item, section, parts) {
+  let spec = '', price = item.price, compat = true, tooltip = '';
+
+  // Unified compatibility check
+  if (item._compat === false) { compat = false; tooltip = item._tooltip || '不兼容'; }
+
+  switch(parts) {
+    case 'cpus':
+      spec = `${item.cores} | ${item.tdp}W | ${item.socket}`;
+      break;
+    case 'gpus':
+      spec = `${item.vram}GB ${item.vramType} | ${item.busWidth}-bit | ${item.bw} GB/s | ${item.tdp}W`;
+      break;
+    case 'mobos':
+      spec = `${item.chipset} | ${item.ramType.toUpperCase()} | ${item.ff} | VRM:${item.vrm}`;
+      break;
+    case 'rams':
+      spec = `DDR${item.type === 'ddr5' ? '5' : '4'} | ${item.speed}MHz`;
+      break;
+    case 'storages':
+      spec = item.speed;
+      break;
+    case 'psus':
+      spec = `${item.watt}W | ${item.cert} | ${item.modular}${item.atx31 ? ' | ATX3.1' : ''}`;
+      if (item._enough === false) { compat = false; tooltip = `建议 ≥ ${item._recWatt}W`; }
+      break;
+    case 'cases':
+      spec = `GPU≤${item.gpuLen}mm | 散热≤${item.coolerH}mm | ${item.ff}`;
+      break;
+    case 'coolers':
+      spec = `解热 ${item.tdpMax}W | ${item.type === 'air' ? '风冷' : item.type === 'aio240' ? '240水冷' : '360水冷'}`;
+      if (item._enoughTdp === false) { compat = false; tooltip = `解热能力不足 (CPU ${state.cpu?.tdp || '?'}W > 散热${item.tdpMax}W)`; }
+      break;
+  }
+
+  const key = parts.slice(0, -1); // 'cpus' -> 'cpu'
+  const isSelected = state[key] && state[key].id === item.id;
+  const cls = ['comp-card', isSelected ? 'selected' : '', !compat ? 'incompatible' : ''].filter(Boolean).join(' ');
+  // Price display: show new price, + used price if available
+  const priceDisplay = item.priceUsed
+    ? `<span class="price">¥${item.price.toLocaleString()}</span> <span style="font-size:.65rem;color:var(--text-muted);font-family:var(--font-mono)">二手 ¥${item.priceUsed.toLocaleString()}</span>`
+    : `<span class="price">¥${item.price.toLocaleString()}</span>`;
+
+  return `<div class="${cls}" data-id="${item.id}" data-tooltip="${tooltip}" onclick="selectPart('${key}','${item.id}')">
+    <div style="flex:1;min-width:0">
+      <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.name}</div>
+      <div class="spec">${spec}</div>
+    </div>
+    <span class="tag">${item.tier === 'flagship' ? '旗舰' : item.tier === 'high' ? '高端' : item.tier === 'mid' ? '中端' : '入门'}</span>
+    ${item.rec ? `<span style="font-size:.65rem;color:var(--accent-yellow);white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis" title="${item.rec}">${item.rec.slice(0,10)}</span>` : ''}
+    ${priceDisplay}
+  </div>`;
+}
+
+function renderSection(s) {
+  const el = document.getElementById('section-' + s.key);
+  if (!el) return;
+  const list = getFiltered(s.parts, s.key, s);
+  const body = el.querySelector('.comp-list');
+  if (list.length === 0) {
+    body.innerHTML = '<div class="no-match">没有匹配的配件<br><small>请调整过滤条件或上游选择</small></div>';
+  } else {
+    body.innerHTML = list.map(item => renderCompCard(item, s, s.parts)).join('');
+  }
+  // Update selected badge
+  const badge = el.querySelector('.selected-badge');
+  const stateKey = s.key === 'storage' ? 'storage' : s.key === 'case' ? 'case' : s.key === 'cooler' ? 'cooler' : s.key;
+  const sel = state[stateKey];
+  if (sel) { badge.textContent = sel.name.length > 18 ? sel.name.slice(0,16)+'…' : sel.name; badge.classList.add('show'); }
+  else badge.classList.remove('show');
+}
+
+function renderAll() {
+  SECTIONS.forEach(s => renderSection(s));
+  updateStatus();
+  renderConfigList();
+  renderPerformance();
+}
+
+// =====================================================================
+// SELECTION LOGIC
+// =====================================================================
+function selectPart(key, id) {
+  const partsMap = { cpu:'cpus', gpu:'gpus', mobo:'mobos', ram:'rams', storage:'storages', psu:'psus', case:'cases', cooler:'coolers' };
+  const list = HARDWARE[partsMap[key]];
+  const item = list.find(i => i.id === id);
+  if (!item) return;
+
+  // Check compatibility
+  if (item._compat === false) return;
+  if (item._enough === false) return;   // PSU wattage
+  if (item._enoughTdp === false) return; // Cooler TDP
+
+  // Toggle or set
+  if (state[key] && state[key].id === id) {
+    state[key] = null;
+  } else {
+    state[key] = item;
+    // Cascade clear: upstream change clears downstream
+    if (key === 'cpu') { state.mobo = null; state.ram = null; state.cooler = null; }
+    if (key === 'mobo') { state.ram = null; }
+  }
+  renderAll();
+}
+
+// =====================================================================
+// FILTER HANDLERS
+// =====================================================================
+function setFilter(section, filterKey, value) {
+  state[filterKey] = value;
+  // Update filter buttons
+  const el = document.getElementById('section-' + section);
+  if (el) {
+    el.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.val === value);
+    });
+  }
+  renderAll();
+}
+
+// =====================================================================
+// STATUS & TOTAL
+// =====================================================================
+function updateStatus() {
+  const parts = ['cpu','gpu','mobo','ram','storage','psu','case','cooler'];
+  const selected = parts.filter(k => state[k] !== null);
+  const total = selected.reduce((sum, k) => sum + state[k].price, 0);
+
+  // Compatibility check
+  let statusClass = 'ok', statusText = '';
+  if (selected.length === 0) { statusText = '待选择配件'; }
+  else if (selected.length < 8) { statusText = `已选 ${selected.length}/8 项`; }
+  else { statusText = '✅ 全部已选'; statusClass = 'ok'; }
+
+  // Check for issues
+  if (state.cpu && state.mobo) {
+    if (state.cpu.socket !== state.mobo.socket) { statusClass = 'err'; statusText = '❌ CPU与主板不兼容'; }
+    else if (state.cpu.tdp > state.mobo.tdpMax) { statusClass = 'warn'; statusText = '⚠️ 主板供电可能不足'; }
+  }
+  if (state.mobo && state.ram) {
+    const need = state.mobo.ramType === 'ddr5' ? 'ddr5' : 'ddr4';
+    if (state.ram.type !== need) { statusClass = 'err'; statusText = '❌ 内存类型不兼容'; }
+  }
+  if (state.cpu && state.gpu && state.psu) {
+    const rec = Math.ceil(((state.cpu.tdp + state.gpu.tdp) * 1.5 + 100) / 50) * 50;
+    if (state.psu.watt < rec) { statusClass = 'warn'; statusText = `⚠️ 电源建议≥${rec}W`; }
+  }
+  if (state.cpu && state.cooler) {
+    if (state.cooler.tdpMax < state.cpu.tdp) { statusClass = 'warn'; statusText = '⚠️ 散热器解热能力不足'; }
+  }
+  if (state.mobo && state.case) {
+    if (state.case.ff === 'mATX' && state.mobo.ff === 'ATX') { statusClass = 'err'; statusText = '❌ 机箱不兼容主板板型'; }
+  }
+
+  document.getElementById('status-dot').className = 'dot ' + statusClass;
+  document.getElementById('status-text').textContent = statusText;
+  document.getElementById('total-price').textContent = '¥' + total.toLocaleString();
+}
+
+// =====================================================================
+// CONFIG LIST (Tab 1)
+// =====================================================================
+function renderConfigList() {
+  const parts = [
+    {key:'cpu',label:'CPU 处理器',icon:'🔲'},
+    {key:'gpu',label:'GPU 显卡',icon:'🎮'},
+    {key:'mobo',label:'主板',icon:'📟'},
+    {key:'ram',label:'内存',icon:'🧮'},
+    {key:'storage',label:'硬盘',icon:'💾'},
+    {key:'psu',label:'电源',icon:'⚡'},
+    {key:'case',label:'机箱',icon:'🏠'},
+    {key:'cooler',label:'散热器',icon:'❄️'},
+  ];
+
+  let rows = parts.map(p => {
+    const sel = state[p.key];
+    if (!sel) return `<tr class="empty-row"><td class="category">${p.icon} ${p.label}</td><td colspan="2">— 未选择 —</td></tr>`;
+    let spec = '';
+    if (p.key === 'cpu') spec = `${sel.cores} | ${sel.tdp}W | ${sel.socket}`;
+    if (p.key === 'gpu') spec = `${sel.vram}GB ${sel.vramType} | ${sel.busWidth}-bit | ${sel.bw} GB/s`;
+    if (p.key === 'mobo') spec = `${sel.chipset} | ${sel.ramType.toUpperCase()} | ${sel.ff}`;
+    if (p.key === 'ram') spec = `DDR${sel.type==='ddr5'?'5':'4'} | ${sel.speed}MHz | ${sel.capacity}GB`;
+    if (p.key === 'storage') spec = `${sel.type.toUpperCase()} | ${(sel.capacity/1024).toFixed(1)}TB | ${sel.speed}`;
+    if (p.key === 'psu') spec = `${sel.watt}W | ${sel.cert} | ${sel.modular}`;
+    if (p.key === 'case') spec = `GPU≤${sel.gpuLen}mm | 散热≤${sel.coolerH}mm`;
+    if (p.key === 'cooler') spec = `解热${sel.tdpMax}W | ${sel.type}`;
+    return `<tr>
+      <td class="category">${p.icon} ${p.label}</td>
+      <td>${sel.name}</td>
+      <td style="font-family:var(--font-mono);color:var(--accent-yellow);text-align:right">¥${sel.price.toLocaleString()}${sel.priceUsed ? ` <span style="font-size:.7rem;color:var(--text-muted);">二手¥${sel.priceUsed.toLocaleString()}</span>` : ''}</td>
+    </tr>`;
+  }).join('');
+
+  const total = parts.reduce((s, p) => s + (state[p.key] ? state[p.key].price : 0), 0);
+
+  document.getElementById('config-list').innerHTML = `
+    <h2>🛒 配置清单</h2>
+    <table class="config-table">${rows}</table>
+    <div class="config-total">总计: <span>¥${total.toLocaleString()}</span></div>
+  `;
+}
+
+// =====================================================================
+// PERFORMANCE (Tab 2)
+// =====================================================================
+function renderPerformance() {
+  if (!state.gpu || !state.cpu) {
+    document.getElementById('perf-content').innerHTML =
+      '<p class="section-desc" style="text-align:center;padding:40px">请先在左侧选择 <strong>CPU</strong> 和 <strong>GPU</strong> 后再查看性能评估</p>';
+    return;
+  }
+
+  const gpu = state.gpu;
+  const cpu = state.cpu;
+  const pf = gpu.perf; // Relative performance factor
+
+  // CPU bottleneck at 1080p
+  const cpuBottleneck = cpu.tier === 'entry' ? 0.85 : cpu.tier === 'mid' ? 0.95 : 1.0;
+
+  let gameCards = Object.entries(GAME_BASELINE).map(([key, g]) => {
+    const fps1080 = Math.round(g.qhd * pf * g.fhd * cpuBottleneck);
+    const fps1440 = Math.round(g.qhd * pf);
+    const fps4k = Math.round(g.qhd * pf * g.uhd);
+
+    const rate = (fps) => {
+      if (fps >= 144) return ['⚡ 电竞级','rating-s'];
+      if (fps >= 90) return ['✅ 非常流畅','rating-a'];
+      if (fps >= 60) return ['👍 流畅','rating-b'];
+      if (fps >= 45) return ['⚠️ 可玩','rating-c'];
+      if (fps >= 30) return ['🔶 勉强','rating-d'];
+      return ['❌ 不可玩','rating-f'];
+    };
+    const r1080 = rate(fps1080), r1440 = rate(fps1440), r4k = rate(fps4k);
+
+    // Recommendation
+    let rec = '';
+    if (fps4k >= 60) rec = '✨ 推荐 4K 高画质体验';
+    else if (fps1440 >= 90) rec = '✨ 推荐 2K 高刷体验';
+    else if (fps1080 >= 144) rec = '✨ 推荐 1080p 电竞体验';
+    else if (fps1080 >= 60) rec = '👍 1080p 流畅可玩';
+    else rec = '⚠️ 建议降低画质设置';
+
+    return `<div class="perf-card">
+      <h3>${g.name}</h3>
+      <div style="font-size:.7rem;color:var(--text-muted);margin-bottom:6px">${g.preset}</div>
+      <table>
+        <tr><th></th><th>1080p</th><th>2K (1440p)</th><th>4K</th></tr>
+        <tr>
+          <td style="text-align:left">帧率</td>
+          <td>${fps1080}</td><td>${fps1440}</td><td>${fps4k}</td>
+        </tr>
+        <tr>
+          <td style="text-align:left">体验</td>
+          <td><span class="rating ${r1080[1]}">${r1080[0]}</span></td>
+          <td><span class="rating ${r1440[1]}">${r1440[0]}</span></td>
+          <td><span class="rating ${r4k[1]}">${r4k[0]}</span></td>
+        </tr>
+      </table>
+      <div class="rec">${rec}</div>
+    </div>`;
+  }).join('');
+
+  // ---- AI Performance (Quantization-Aware) ----
+  const vram = gpu.vram;
+  const bw = gpu.bw;
+  const tflops = gpu.tflops || (bw * 0.06); // rough estimate if tflops not available
+
+  // Build model data with deployment info
+  let modelData = AI_MODELS.map(m => {
+    let bestQuant = null, bestVram = 0;
+    if (vram >= m.q4 * 1.2) { bestQuant = 'q4'; bestVram = m.q4; }
+    else if (vram >= m.q6 * 1.2) { bestQuant = 'q6'; bestVram = m.q6; }
+    else if (vram >= m.q3 * 1.2) { bestQuant = 'q3'; bestVram = m.q3; }
+    else if (vram >= m.iq3 * 1.2) { bestQuant = 'iq3'; bestVram = m.iq3; }
+    else if (vram >= m.q2 * 1.2) { bestQuant = 'q2'; bestVram = m.q2; }
+    else if (vram >= m.q8 * 1.2) { bestQuant = 'q8'; bestVram = m.q8; }
+    const qi = QUANT_LEVELS.find(q => q.key === bestQuant);
+    const quality = bestQuant ? (qi?.stars || 0) : 0;
+    const tokSpeed = bestQuant ? Math.round(bw * 0.75 / (bestVram || 1)) : 0;
+    return { ...m, bestQuant, bestVram, quality, tokSpeed, qi };
+  });
+
+  // Store for filtering
+  window._modelData = modelData;
+
+  // Find a good reference model for speed calculation
+  const ref7B = AI_MODELS.find(m => m.params >= 7 && m.params <= 8);
+  const ref14B = AI_MODELS.find(m => m.params >= 13 && m.params <= 14);
+  const ref32B = AI_MODELS.find(m => m.params >= 32 && m.params <= 34);
+
+  // Token speed estimation (memory-bandwidth bound for decode)
+  // Formula: tok/s ≈ bandwidth * 0.75 / model_GB (real-world utilization ~75%)
+  // Prefill (prompt processing) is compute-bound: ~ tflops / (params * 1.5) * 1000
+  const tok7B = ref7B && vram >= ref7B.q4 * 1.2 ? Math.round(bw * 0.75 / ref7B.q4) : null;
+  const tok14B = ref14B && vram >= ref14B.q4 * 1.2 ? Math.round(bw * 0.75 / ref14B.q4) : null;
+  const tok32B = ref32B && vram >= ref32B.q4 * 1.2 ? Math.round(bw * 0.75 / (ref32B.q4 || 20)) : null;
+  const prefillSpeed7B = Math.round(tflops * 1000 / (7 * 1.5));
+
+  const aiHTML = `
+  <div class="ai-card">
+    <h3>🤖 AI 推理性能 <span style="font-size:.7rem;color:var(--text-muted)">(量化模型 · llama.cpp/Ollama)</span></h3>
+    <div class="ai-info">
+      <div class="ai-spec">
+        <div>GPU: <strong>${gpu.name}</strong> | 显存: <strong>${vram}GB ${gpu.vramType}</strong></div>
+        <div>带宽: <strong>${bw} GB/s</strong> | 算力: <strong>${tflops.toFixed(1)} TFLOPS</strong></div>
+        <div style="margin-top:4px;font-size:.7rem;color:var(--text-muted)">
+          量化: <span style="color:#3fb950">Q4_K_M=推荐</span> | <span style="color:#d2991d">Q3_K_M=压缩</span> | <span style="color:#f0883e">IQ3_XXS=极限</span> | <span style="color:#f85149">Q2_K=极致</span>
+        </div>
+      </div>
+    </div>
+    <div class="ai-models" style="margin-top:14px">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
+        <span style="font-size:.7rem;color:var(--text-muted)">排序:</span>
+        <select id="ai-sort" onchange="renderAITable()" style="background:var(--bg-tertiary);color:var(--text-primary);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:.7rem">
+          <option value="size-asc">参数量 ↑</option>
+          <option value="size-desc">参数量 ↓</option>
+          <option value="speed-desc">速度最快</option>
+          <option value="quality-desc" selected>推荐优先</option>
+          <option value="family">按系列</option>
+        </select>
+        <span style="font-size:.7rem;color:var(--text-muted)">筛选:</span>
+        <select id="ai-filter" onchange="renderAITable()" style="background:var(--bg-tertiary);color:var(--text-primary);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:.7rem">
+          <option value="all">全部模型</option>
+          <option value="deployable" selected>仅可部署</option>
+          <option value="quality">推荐质量 (Q4/Q6/Q8)</option>
+          <option value="family-deepseek">DeepSeek系列</option>
+          <option value="family-qwen">Qwen系列</option>
+          <option value="family-llama">Llama系列</option>
+          <option value="family-mistral">Mistral系列</option>
+          <option value="family-other">其他系列</option>
+        </select>
+        <span style="font-size:.65rem;color:var(--text-muted);margin-left:auto" id="ai-count"></span>
+      </div>
+      <div style="max-height:420px;overflow-y:auto">
+        <table style="font-size:.73rem" id="ai-table">
+          <thead><tr><th>模型</th><th>参数</th><th>推荐量化</th><th>生成速度</th><th>推荐</th></tr></thead>
+          <tbody id="ai-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="ai-speed">
+      <div>⚡ <strong>7B Q4_K_M 生成速度:</strong> ${tok7B ? `<strong>~${tok7B} tok/s</strong>` : '<span style="color:var(--text-muted)">显存不足</span>'} (内存带宽瓶颈)</div>
+      <div>⚡ <strong>14B Q4_K_M 生成速度:</strong> ${tok14B ? `<strong>~${tok14B} tok/s</strong>` : '<span style="color:var(--text-muted)">显存不足</span>'}</div>
+      <div>⚡ <strong>32B Q4_K_M 生成速度:</strong> ${tok32B ? `<strong>~${tok32B} tok/s</strong>` : '<span style="color:var(--text-muted)">显存不足</span>'}</div>
+      <div>📥 <strong>Prompt 处理:</strong> ~${prefillSpeed7B.toLocaleString()} tok/s (7B, 计算瓶颈)</div>
+      <div style="margin-top:8px;font-size:.75rem;color:var(--text-secondary)">
+        💡 公式: 生成速度 = 带宽 × 0.75 ÷ 模型VRAM占用 | Prompt处理 = 算力 ÷ 模型计算量<br>
+        推荐: Ollama + Open WebUI | ${vram >= 24 ? '✅ 24GB+ 可运行 32B Q4 + 长上下文' : vram >= 16 ? '✅ 16GB 可运行 14B Q4 流畅' : vram >= 12 ? '⚠️ 12GB 可运行 8B 流畅，14B需极限量化' : '⚠️ 8GB 仅适合 7B 以下模型'}
+      </div>
+    </div>
+  </div>`;
+
+  // ---- Price Chart Section ----
+  const chartHTML = `
+  <div class="ai-card" style="margin-top:16px">
+    <h3>📈 价格走势图</h3>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+      <select id="chart-cat1" onchange="onChartCatChange(1)" style="background:var(--bg-tertiary);color:var(--text-primary);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:.75rem">
+        <option value="">— 选择类别 —</option>
+        <option value="cpus">CPU</option><option value="gpus" selected>GPU</option><option value="rams">内存</option><option value="storages">硬盘</option>
+      </select>
+      <select id="chart-prod1" onchange="onChartProdChange()" style="background:var(--bg-tertiary);color:var(--text-primary);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:.75rem;max-width:220px"></select>
+      <span style="color:var(--text-muted);font-size:.8rem">vs</span>
+      <select id="chart-cat2" onchange="onChartCatChange(2)" style="background:var(--bg-tertiary);color:var(--text-primary);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:.75rem">
+        <option value="">— 选择类别 —</option>
+        <option value="cpus">CPU</option><option value="gpus">GPU</option><option value="rams">内存</option><option value="storages">硬盘</option>
+      </select>
+      <select id="chart-prod2" onchange="onChartProdChange()" style="background:var(--bg-tertiary);color:var(--text-primary);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:.75rem;max-width:220px"></select>
+      <select id="chart-days" onchange="onChartDaysChange()" style="background:var(--bg-tertiary);color:var(--text-primary);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:.75rem;margin-left:auto">
+        <option value="7">近7天</option><option value="30" selected>近30天</option>
+      </select>
+    </div>
+    <canvas id="price-chart" style="width:100%;height:280px;border-radius:8px"></canvas>
+  </div>`;
+
+  document.getElementById('perf-content').innerHTML = `
+    <h2>🎮 游戏性能评估</h2>
+    <div class="section-desc">
+      基于 <strong>${gpu.name}</strong> + <strong>${cpu.name}</strong> | 参考 Gamers Nexus / Hardware Unboxed 评测数据估算
+    </div>
+    <div class="perf-grid">${gameCards}</div>
+    ${aiHTML}
+    ${chartHTML}
+  `;
+
+  // Populate chart dropdowns and AI table
+  setTimeout(() => {
+    onChartCatChange(1);
+    onChartCatChange(2);
+    renderAITable();
+  }, 50);
+}
+
+// ---- Chart control functions ----
+// ---- AI Table render with sort/filter ----
+function renderAITable() {
+  if (!window._modelData) return;
+  const tbody = document.getElementById('ai-tbody');
+  const countEl = document.getElementById('ai-count');
+  if (!tbody) return;
+
+  let data = [...window._modelData];
+  const sortBy = document.getElementById('ai-sort')?.value || 'quality-desc';
+  const filterBy = document.getElementById('ai-filter')?.value || 'all';
+
+  // Filter
+  if (filterBy === 'deployable') {
+    data = data.filter(m => m.bestQuant);
+  } else if (filterBy === 'quality') {
+    data = data.filter(m => m.quality >= 4);
+  } else if (filterBy.startsWith('family-')) {
+    const fam = filterBy.replace('family-', '');
+    if (fam === 'other') {
+      const mainFamilies = ['DeepSeek','Qwen 3.5','Qwen 3','Qwen 2.5','Llama','Mistral'];
+      data = data.filter(m => !mainFamilies.includes(m.family));
+    } else if (fam === 'qwen') {
+      data = data.filter(m => m.family && m.family.startsWith('Qwen'));
+    } else {
+      data = data.filter(m => m.family === fam.charAt(0).toUpperCase() + fam.slice(1));
+    }
+  }
+
+  // Sort
+  switch(sortBy) {
+    case 'size-asc': data.sort((a,b) => a.params - b.params); break;
+    case 'size-desc': data.sort((a,b) => b.params - a.params); break;
+    case 'speed-desc': data.sort((a,b) => b.tokSpeed - a.tokSpeed); break;
+    case 'quality-desc': data.sort((a,b) => b.quality - a.quality || b.params - a.params); break;
+    case 'family': data.sort((a,b) => (a.family||'').localeCompare(b.family||'') || a.params - b.params); break;
+  }
+
+  if (countEl) countEl.textContent = `共 ${data.length} 款`;
+
+  tbody.innerHTML = data.map(m => {
+    const status = m.quality >= 4
+      ? '<span class="ok">✅</span>'
+      : m.bestQuant
+        ? `<span class="warn" style="font-size:.65rem">⚠️ ${m.qi?.label||''}</span>`
+        : '<span class="no">❌</span>';
+    return `<tr>
+      <td>${m.name}</td>
+      <td style="font-size:.7rem;color:var(--text-muted)">${m.activeB ? m.params+'B/'+m.activeB+'B' : m.params+'B'}</td>
+      <td>${m.bestQuant ? `<span style="color:${m.qi?.color||'#fff'}">${m.qi?.label||'—'}</span>` : '—'}</td>
+      <td style="font-family:var(--font-mono);font-size:.75rem">${m.tokSpeed > 0 ? m.tokSpeed+' tok/s' : '—'}</td>
+      <td>${status}</td>
+    </tr>`;
+  }).join('');
+}
+
+function onChartCatChange(n) {
+  const catSel = document.getElementById('chart-cat' + n);
+  const prodSel = document.getElementById('chart-prod' + n);
+  const cat = catSel.value;
+  prodSel.innerHTML = '<option value="">— 选择产品 —</option>';
+  if (!cat || !HARDWARE[cat]) { updateChart(); return; }
+  HARDWARE[cat].forEach(item => {
+    prodSel.innerHTML += `<option value="${item.id}">${item.name.slice(0,30)}</option>`;
+  });
+  updateChart();
+}
+
+function onChartProdChange() {
+  chartState.cat1 = document.getElementById('chart-cat1').value;
+  chartState.product1 = document.getElementById('chart-prod1').value;
+  chartState.cat2 = document.getElementById('chart-cat2').value;
+  chartState.product2 = document.getElementById('chart-prod2').value;
+  updateChart();
+}
+
+function onChartDaysChange() {
+  chartState.days = parseInt(document.getElementById('chart-days').value);
+  updateChart();
+}
+
+// =====================================================================
+// ACTIONS
+// =====================================================================
+function resetAll() {
+  state.cpu = null; state.gpu = null; state.mobo = null; state.ram = null;
+  state.storage = null; state.psu = null; state.case = null; state.cooler = null;
+  state.cpuBrand = 'all'; state.cpuTier = 'all';
+  state.gpuBrand = 'all'; state.gpuTier = 'all';
+  state.moboTier = 'all'; state.moboFF = 'all';
+  state.ramCap = 'all'; state.ramTier = 'all';
+  state.storageType = 'all'; state.storageTier = 'all';
+  state.psuTier = 'all'; state.caseTier = 'all';
+  state.coolerType = 'all'; state.coolerTier = 'all';
+  renderAll();
+  // Reset filter buttons
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn[data-val="all"]').forEach(b => b.classList.add('active'));
+}
+
+function exportConfig() {
+  const parts = ['cpu','gpu','mobo','ram','storage','psu','case','cooler'];
+  const lines = parts.map(p => {
+    const sel = state[p];
+    if (!sel) return `- ${p}: 未选择`;
+    return `- ${p}: ${sel.name} (¥${sel.price})`;
+  });
+  const total = parts.reduce((s, p) => s + (state[p] ? state[p].price : 0), 0);
+  lines.push(`\n总价: ¥${total.toLocaleString()}`);
+  const text = lines.join('\n');
+  navigator.clipboard.writeText(text).then(() => {
+    alert('✅ 配置清单已复制到剪贴板！');
+  }).catch(() => {
+    prompt('手动复制配置清单:', text);
+  });
+}
+
+// =====================================================================
+// SECTION DEFINITIONS & INIT
+// =====================================================================
+const SECTIONS = [
+  {key:'cpu', parts:'cpus', label:'CPU 处理器', icon:'🔲',
+    filters:[
+      {key:'cpuBrand',label:'品牌',opts:[['all','全部'],['intel','Intel'],['amd','AMD']]},
+      {key:'cpuTier',label:'价位',opts:[['all','全部'],['entry','入门'],['mid','中端'],['high','高端'],['flagship','旗舰']]},
+    ]},
+  {key:'gpu', parts:'gpus', label:'GPU 显卡', icon:'🎮',
+    filters:[
+      {key:'gpuBrand',label:'品牌',opts:[['all','全部'],['nvidia','NVIDIA'],['amd','AMD'],['intel','Intel']]},
+      {key:'gpuTier',label:'价位',opts:[['all','全部'],['entry','入门'],['mid','中端'],['high','高端'],['flagship','旗舰']]},
+    ]},
+  {key:'mobo', parts:'mobos', label:'主板', icon:'📟',
+    filters:[
+      {key:'moboTier',label:'价位',opts:[['all','全部'],['entry','入门'],['mid','中端'],['high','高端']]},
+      {key:'moboFF',label:'板型',opts:[['all','全部'],['ATX','ATX'],['mATX','mATX']]},
+    ]},
+  {key:'ram', parts:'rams', label:'内存', icon:'🧮',
+    filters:[
+      {key:'ramCap',label:'容量',opts:[['all','全部'],['16','16GB'],['32','32GB'],['48','48GB'],['64','64GB']]},
+    ]},
+  {key:'storage', parts:'storages', label:'硬盘', icon:'💾',
+    filters:[
+      {key:'storageType',label:'类型',opts:[['all','全部'],['nvme','NVMe SSD'],['sata','SATA SSD']]},
+    ]},
+  {key:'psu', parts:'psus', label:'电源', icon:'⚡',
+    filters:[
+      {key:'psuTier',label:'价位',opts:[['all','全部'],['entry','入门'],['mid','中端'],['high','高端'],['flagship','旗舰']]},
+    ]},
+  {key:'case', parts:'cases', label:'机箱', icon:'🏠',
+    filters:[
+      {key:'caseTier',label:'价位',opts:[['all','全部'],['entry','入门'],['mid','中端'],['high','高端']]},
+    ]},
+  {key:'cooler', parts:'coolers', label:'散热器', icon:'❄️',
+    filters:[
+      {key:'coolerType',label:'类型',opts:[['all','全部'],['air','风冷'],['aio240','240水冷'],['aio360','360水冷']]},
+    ]},
+];
+
+function buildSidebar() {
+  const container = document.getElementById('sections');
+  let html = '';
+  SECTIONS.forEach(s => {
+    const filterHtml = s.filters.map(f => `
+      <div style="margin-bottom:4px">
+        <span style="font-size:.7rem;color:var(--text-muted);margin-right:4px">${f.label}:</span>
+        ${f.opts.map(([val,label]) =>
+          `<button class="filter-btn${val==='all'?' active':''}" data-val="${val}" onclick="setFilter('${s.key}','${f.key}','${val}')">${label}</button>`
+        ).join('')}
+      </div>
+    `).join('');
+
+    html += `
+    <div class="section" id="section-${s.key}">
+      <div class="section-header" onclick="toggleSection('${s.key}')">
+        <span class="icon">${s.icon}</span> ${s.label}
+        <span class="selected-badge"></span>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="section-body">
+        <div class="section-body-inner">
+          <div class="filter-row">${filterHtml}</div>
+          <div class="comp-list"></div>
+        </div>
+      </div>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+function toggleSection(key) {
+  const body = document.querySelector(`#section-${key} .section-body`);
+  const arrow = document.querySelector(`#section-${key} .arrow`);
+  body.classList.toggle('collapsed');
+  arrow.style.transform = body.classList.contains('collapsed') ? 'rotate(-90deg)' : 'rotate(0deg)';
+}
+
+// =====================================================================
+// TABS
+// =====================================================================
+document.addEventListener('DOMContentLoaded', async () => {
+  buildSidebar();
+  renderAll();
+  showRefreshButton();
+  await loadPrices();
+
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tab = btn.dataset.tab;
+      document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
+      document.getElementById('panel-' + tab).style.display = 'block';
+      if (tab === 'perf') renderPerformance();
+    });
+  });
+});
+</script>
+</body>
+</html>

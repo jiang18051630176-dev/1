@@ -1,0 +1,13 @@
+{
+  "name": "pc-builder-server",
+  "version": "1.0.0",
+  "description": "PC装机助手 — 完整版 (Node.js + Playwright)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "npx playwright install chromium --with-deps"
+  },
+  "dependencies": {
+    "playwright": "^1.48.0"
+  }
+}
