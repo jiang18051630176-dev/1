@@ -10,8 +10,7 @@
           {"platform": "淘宝", "price": 598, "shop": "Intel官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123456"},
           {"platform": "拼多多", "price": 550, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=123"}
         ],
-        "best_price": 550,
-        "best_platform": "拼多多"
+        "best_price": 550, "best_platform": "拼多多"
       },
       {
         "name": "Intel Core i5-13600KF",
@@ -20,8 +19,7 @@
           {"platform": "淘宝", "price": 1420, "shop": "Intel官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123457"},
           {"platform": "拼多多", "price": 1399, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=124"}
         ],
-        "best_price": 1399,
-        "best_platform": "拼多多"
+        "best_price": 1399, "best_platform": "拼多多"
       },
       {
         "name": "Intel Core i5-14600KF",
@@ -30,8 +28,7 @@
           {"platform": "淘宝", "price": 1610, "shop": "Intel官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123458"},
           {"platform": "拼多多", "price": 1580, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=125"}
         ],
-        "best_price": 1580,
-        "best_platform": "拼多多"
+        "best_price": 1580, "best_platform": "拼多多"
       },
       {
         "name": "AMD Ryzen 5 7500F",
@@ -40,8 +37,7 @@
           {"platform": "淘宝", "price": 780, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123459"},
           {"platform": "拼多多", "price": 709, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=126"}
         ],
-        "best_price": 709,
-        "best_platform": "拼多多"
+        "best_price": 709, "best_platform": "拼多多"
       },
       {
         "name": "AMD Ryzen 7 7800X3D",
@@ -50,8 +46,196 @@
           {"platform": "淘宝", "price": 2300, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123460"},
           {"platform": "拼多多", "price": 2288, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=127"}
         ],
-        "best_price": 2288,
-        "best_platform": "拼多多"
+        "best_price": 2288, "best_platform": "拼多多"
+      },
+      {
+        "name": "Intel Core Ultra 5 245KF",
+        "platforms": [
+          {"platform": "京东", "price": 920, "shop": "Intel京东自营旗舰店", "url": "https://item.jd.com/100012350.html"},
+          {"platform": "淘宝", "price": 880, "shop": "Intel官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123461"},
+          {"platform": "拼多多", "price": 850, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=128"}
+        ],
+        "best_price": 850, "best_platform": "拼多多"
+      },
+      {
+        "name": "Intel Core Ultra 7 265K",
+        "platforms": [
+          {"platform": "京东", "price": 1630, "shop": "Intel京东自营旗舰店", "url": "https://item.jd.com/100012351.html"},
+          {"platform": "淘宝", "price": 1580, "shop": "Intel官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123462"},
+          {"platform": "拼多多", "price": 1520, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=129"}
+        ],
+        "best_price": 1520, "best_platform": "拼多多"
+      },
+      {
+        "name": "Intel Core Ultra 9 285K",
+        "platforms": [
+          {"platform": "京东", "price": 4700, "shop": "Intel京东自营旗舰店", "url": "https://item.jd.com/100012352.html"},
+          {"platform": "淘宝", "price": 4550, "shop": "Intel官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123463"},
+          {"platform": "拼多多", "price": 4399, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=130"}
+        ],
+        "best_price": 4399, "best_platform": "拼多多"
+      },
+      {
+        "name": "Intel Core i3-12100F",
+        "platforms": [
+          {"platform": "京东", "price": 420, "shop": "Intel京东自营旗舰店", "url": "https://item.jd.com/100012353.html"},
+          {"platform": "淘宝", "price": 390, "shop": "Intel官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123464"},
+          {"platform": "拼多多", "price": 360, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=131"}
+        ],
+        "best_price": 360, "best_platform": "拼多多"
+      },
+      {
+        "name": "Intel Core i5-12600KF",
+        "platforms": [
+          {"platform": "京东", "price": 980, "shop": "Intel京东自营旗舰店", "url": "https://item.jd.com/100012354.html"},
+          {"platform": "淘宝", "price": 920, "shop": "Intel官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123465"},
+          {"platform": "拼多多", "price": 880, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=132"}
+        ],
+        "best_price": 880, "best_platform": "拼多多"
+      },
+      {
+        "name": "Intel Core i7-13700KF",
+        "platforms": [
+          {"platform": "京东", "price": 2180, "shop": "Intel京东自营旗舰店", "url": "https://item.jd.com/100012355.html"},
+          {"platform": "淘宝", "price": 2100, "shop": "Intel官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123466"},
+          {"platform": "拼多多", "price": 1999, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=133"}
+        ],
+        "best_price": 1999, "best_platform": "拼多多"
+      },
+      {
+        "name": "Intel Core i7-14700KF",
+        "platforms": [
+          {"platform": "京东", "price": 2380, "shop": "Intel京东自营旗舰店", "url": "https://item.jd.com/100012356.html"},
+          {"platform": "淘宝", "price": 2300, "shop": "Intel官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123467"},
+          {"platform": "拼多多", "price": 2200, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=134"}
+        ],
+        "best_price": 2200, "best_platform": "拼多多"
+      },
+      {
+        "name": "Intel Core i9-13900K",
+        "platforms": [
+          {"platform": "京东", "price": 3200, "shop": "Intel京东自营旗舰店", "url": "https://item.jd.com/100012357.html"},
+          {"platform": "淘宝", "price": 3100, "shop": "Intel官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123468"},
+          {"platform": "拼多多", "price": 2999, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=135"}
+        ],
+        "best_price": 2999, "best_platform": "拼多多"
+      },
+      {
+        "name": "Intel Core i9-14900K",
+        "platforms": [
+          {"platform": "京东", "price": 3650, "shop": "Intel京东自营旗舰店", "url": "https://item.jd.com/100012358.html"},
+          {"platform": "淘宝", "price": 3550, "shop": "Intel官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123469"},
+          {"platform": "拼多多", "price": 3399, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=136"}
+        ],
+        "best_price": 3399, "best_platform": "拼多多"
+      },
+      {
+        "name": "AMD Ryzen 5 9600",
+        "platforms": [
+          {"platform": "京东", "price": 1250, "shop": "AMD京东自营旗舰店", "url": "https://item.jd.com/100012359.html"},
+          {"platform": "淘宝", "price": 1180, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123470"},
+          {"platform": "拼多多", "price": 1120, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=137"}
+        ],
+        "best_price": 1120, "best_platform": "拼多多"
+      },
+      {
+        "name": "AMD Ryzen 5 9600X",
+        "platforms": [
+          {"platform": "京东", "price": 1520, "shop": "AMD京东自营旗舰店", "url": "https://item.jd.com/100012360.html"},
+          {"platform": "淘宝", "price": 1450, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123471"},
+          {"platform": "拼多多", "price": 1399, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=138"}
+        ],
+        "best_price": 1399, "best_platform": "拼多多"
+      },
+      {
+        "name": "AMD Ryzen 7 9700X",
+        "platforms": [
+          {"platform": "京东", "price": 2100, "shop": "AMD京东自营旗舰店", "url": "https://item.jd.com/100012361.html"},
+          {"platform": "淘宝", "price": 2000, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123472"},
+          {"platform": "拼多多", "price": 1950, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=139"}
+        ],
+        "best_price": 1950, "best_platform": "拼多多"
+      },
+      {
+        "name": "AMD Ryzen 7 9800X3D",
+        "platforms": [
+          {"platform": "京东", "price": 2950, "shop": "AMD京东自营旗舰店", "url": "https://item.jd.com/100012362.html"},
+          {"platform": "淘宝", "price": 2850, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123473"},
+          {"platform": "拼多多", "price": 2750, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=140"}
+        ],
+        "best_price": 2750, "best_platform": "拼多多"
+      },
+      {
+        "name": "AMD Ryzen 9 9900X",
+        "platforms": [
+          {"platform": "京东", "price": 2750, "shop": "AMD京东自营旗舰店", "url": "https://item.jd.com/100012363.html"},
+          {"platform": "淘宝", "price": 2650, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123474"},
+          {"platform": "拼多多", "price": 2550, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=141"}
+        ],
+        "best_price": 2550, "best_platform": "拼多多"
+      },
+      {
+        "name": "AMD Ryzen 9 9950X3D",
+        "platforms": [
+          {"platform": "京东", "price": 4700, "shop": "AMD京东自营旗舰店", "url": "https://item.jd.com/100012364.html"},
+          {"platform": "淘宝", "price": 4550, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123475"},
+          {"platform": "拼多多", "price": 4399, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=142"}
+        ],
+        "best_price": 4399, "best_platform": "拼多多"
+      },
+      {
+        "name": "AMD Ryzen 5 7600X",
+        "platforms": [
+          {"platform": "京东", "price": 1180, "shop": "AMD京东自营旗舰店", "url": "https://item.jd.com/100012365.html"},
+          {"platform": "淘宝", "price": 1120, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123476"},
+          {"platform": "拼多多", "price": 1050, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=143"}
+        ],
+        "best_price": 1050, "best_platform": "拼多多"
+      },
+      {
+        "name": "AMD Ryzen 7 7700X",
+        "platforms": [
+          {"platform": "京东", "price": 1580, "shop": "AMD京东自营旗舰店", "url": "https://item.jd.com/100012366.html"},
+          {"platform": "淘宝", "price": 1500, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123477"},
+          {"platform": "拼多多", "price": 1420, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=144"}
+        ],
+        "best_price": 1420, "best_platform": "拼多多"
+      },
+      {
+        "name": "AMD Ryzen 9 7900X",
+        "platforms": [
+          {"platform": "京东", "price": 2480, "shop": "AMD京东自营旗舰店", "url": "https://item.jd.com/100012367.html"},
+          {"platform": "淘宝", "price": 2380, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123478"},
+          {"platform": "拼多多", "price": 2280, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=145"}
+        ],
+        "best_price": 2280, "best_platform": "拼多多"
+      },
+      {
+        "name": "AMD Ryzen 9 7950X",
+        "platforms": [
+          {"platform": "京东", "price": 3200, "shop": "AMD京东自营旗舰店", "url": "https://item.jd.com/100012368.html"},
+          {"platform": "淘宝", "price": 3100, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123479"},
+          {"platform": "拼多多", "price": 2999, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=146"}
+        ],
+        "best_price": 2999, "best_platform": "拼多多"
+      },
+      {
+        "name": "AMD Ryzen 5 5600",
+        "platforms": [
+          {"platform": "京东", "price": 460, "shop": "AMD京东自营旗舰店", "url": "https://item.jd.com/100012369.html"},
+          {"platform": "淘宝", "price": 430, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123480"},
+          {"platform": "拼多多", "price": 390, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=147"}
+        ],
+        "best_price": 390, "best_platform": "拼多多"
+      },
+      {
+        "name": "AMD Ryzen 7 5700X3D",
+        "platforms": [
+          {"platform": "京东", "price": 1020, "shop": "AMD京东自营旗舰店", "url": "https://item.jd.com/100012370.html"},
+          {"platform": "淘宝", "price": 960, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=123481"},
+          {"platform": "拼多多", "price": 910, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=148"}
+        ],
+        "best_price": 910, "best_platform": "拼多多"
       }
     ],
     "gpu": [
@@ -62,8 +246,7 @@
           {"platform": "淘宝", "price": 2350, "shop": "NVIDIA官方旗舰店", "url": "https://item.taobao.com/item.htm?id=200001"},
           {"platform": "拼多多", "price": 2299, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=200"}
         ],
-        "best_price": 2299,
-        "best_platform": "拼多多"
+        "best_price": 2299, "best_platform": "拼多多"
       },
       {
         "name": "NVIDIA GeForce RTX 4070 Super 12G",
@@ -72,8 +255,7 @@
           {"platform": "淘宝", "price": 4200, "shop": "NVIDIA官方旗舰店", "url": "https://item.taobao.com/item.htm?id=200002"},
           {"platform": "拼多多", "price": 3200, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=201"}
         ],
-        "best_price": 3200,
-        "best_platform": "拼多多"
+        "best_price": 3200, "best_platform": "拼多多"
       },
       {
         "name": "NVIDIA GeForce RTX 4060 Ti 8G",
@@ -82,8 +264,7 @@
           {"platform": "淘宝", "price": 3100, "shop": "NVIDIA官方旗舰店", "url": "https://item.taobao.com/item.htm?id=200003"},
           {"platform": "拼多多", "price": 2899, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=202"}
         ],
-        "best_price": 2899,
-        "best_platform": "拼多多"
+        "best_price": 2899, "best_platform": "拼多多"
       },
       {
         "name": "AMD Radeon RX 7800 XT 16G",
@@ -92,8 +273,52 @@
           {"platform": "淘宝", "price": 3500, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=200004"},
           {"platform": "拼多多", "price": 3199, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=203"}
         ],
-        "best_price": 3199,
-        "best_platform": "拼多多"
+        "best_price": 3199, "best_platform": "拼多多"
+      },
+      {
+        "name": "NVIDIA GeForce RTX 5070 12G",
+        "platforms": [
+          {"platform": "京东", "price": 4799, "shop": "NVIDIA京东自营旗舰店", "url": "https://item.jd.com/100020005.html"},
+          {"platform": "淘宝", "price": 4600, "shop": "NVIDIA官方旗舰店", "url": "https://item.taobao.com/item.htm?id=200005"},
+          {"platform": "拼多多", "price": 4499, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=204"}
+        ],
+        "best_price": 4499, "best_platform": "拼多多"
+      },
+      {
+        "name": "NVIDIA GeForce RTX 5080 16G",
+        "platforms": [
+          {"platform": "京东", "price": 10944, "shop": "NVIDIA京东自营旗舰店", "url": "https://item.jd.com/100020006.html"},
+          {"platform": "淘宝", "price": 10500, "shop": "NVIDIA官方旗舰店", "url": "https://item.taobao.com/item.htm?id=200006"},
+          {"platform": "拼多多", "price": 9999, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=205"}
+        ],
+        "best_price": 9999, "best_platform": "拼多多"
+      },
+      {
+        "name": "AMD Radeon RX 9070 GRE 12G",
+        "platforms": [
+          {"platform": "京东", "price": 3149, "shop": "AMD京东自营旗舰店", "url": "https://item.jd.com/100020007.html"},
+          {"platform": "淘宝", "price": 2999, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=200007"},
+          {"platform": "拼多多", "price": 2899, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=206"}
+        ],
+        "best_price": 2899, "best_platform": "拼多多"
+      },
+      {
+        "name": "AMD Radeon RX 9070 XT 16G",
+        "platforms": [
+          {"platform": "京东", "price": 5599, "shop": "AMD京东自营旗舰店", "url": "https://item.jd.com/100020008.html"},
+          {"platform": "淘宝", "price": 5300, "shop": "AMD官方旗舰店", "url": "https://item.taobao.com/item.htm?id=200008"},
+          {"platform": "拼多多", "price": 4299, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=207"}
+        ],
+        "best_price": 4299, "best_platform": "拼多多"
+      },
+      {
+        "name": "Intel Arc B580 12G",
+        "platforms": [
+          {"platform": "京东", "price": 1999, "shop": "Intel京东自营旗舰店", "url": "https://item.jd.com/100020009.html"},
+          {"platform": "淘宝", "price": 1899, "shop": "Intel官方旗舰店", "url": "https://item.taobao.com/item.htm?id=200009"},
+          {"platform": "拼多多", "price": 1799, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=208"}
+        ],
+        "best_price": 1799, "best_platform": "拼多多"
       }
     ],
     "ram": [
@@ -104,8 +329,7 @@
           {"platform": "淘宝", "price": 550, "shop": "金百达旗舰店", "url": "https://item.taobao.com/item.htm?id=300001"},
           {"platform": "拼多多", "price": 319, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=300"}
         ],
-        "best_price": 319,
-        "best_platform": "拼多多"
+        "best_price": 319, "best_platform": "拼多多"
       },
       {
         "name": "金百达银爵 DDR5 6000 32GB",
@@ -114,8 +338,34 @@
           {"platform": "淘宝", "price": 780, "shop": "金百达旗舰店", "url": "https://item.taobao.com/item.htm?id=300002"},
           {"platform": "拼多多", "price": 499, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=301"}
         ],
-        "best_price": 499,
-        "best_platform": "拼多多"
+        "best_price": 499, "best_platform": "拼多多"
+      },
+      {
+        "name": "金士顿FURY DDR5 6000 32GB",
+        "platforms": [
+          {"platform": "京东", "price": 2399, "shop": "京东自营", "url": "https://item.jd.com/100030003.html"},
+          {"platform": "淘宝", "price": 2299, "shop": "金士顿旗舰店", "url": "https://item.taobao.com/item.htm?id=300003"},
+          {"platform": "拼多多", "price": 2199, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=302"}
+        ],
+        "best_price": 2199, "best_platform": "拼多多"
+      },
+      {
+        "name": "芝奇幻锋戟 DDR5 6400 32GB CL32",
+        "platforms": [
+          {"platform": "京东", "price": 2699, "shop": "京东自营", "url": "https://item.jd.com/100030004.html"},
+          {"platform": "淘宝", "price": 2599, "shop": "芝奇旗舰店", "url": "https://item.taobao.com/item.htm?id=300004"},
+          {"platform": "拼多多", "price": 2499, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=303"}
+        ],
+        "best_price": 2499, "best_platform": "拼多多"
+      },
+      {
+        "name": "DDR4 32GB 3200MHz 套条",
+        "platforms": [
+          {"platform": "京东", "price": 499, "shop": "京东自营", "url": "https://item.jd.com/100030005.html"},
+          {"platform": "淘宝", "price": 450, "shop": "旗舰店", "url": "https://item.taobao.com/item.htm?id=300005"},
+          {"platform": "拼多多", "price": 399, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=304"}
+        ],
+        "best_price": 399, "best_platform": "拼多多"
       }
     ],
     "storage": [
@@ -126,8 +376,52 @@
           {"platform": "淘宝", "price": 550, "shop": "致态旗舰店", "url": "https://item.taobao.com/item.htm?id=400001"},
           {"platform": "拼多多", "price": 520, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=400"}
         ],
-        "best_price": 520,
-        "best_platform": "拼多多"
+        "best_price": 520, "best_platform": "拼多多"
+      },
+      {
+        "name": "1TB NVMe PCIe4.0",
+        "platforms": [
+          {"platform": "京东", "price": 460, "shop": "京东自营", "url": "https://item.jd.com/100040002.html"},
+          {"platform": "淘宝", "price": 430, "shop": "旗舰店", "url": "https://item.taobao.com/item.htm?id=400002"},
+          {"platform": "拼多多", "price": 399, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=401"}
+        ],
+        "best_price": 399, "best_platform": "拼多多"
+      },
+      {
+        "name": "梵想 S790C 2TB PCIe4.0",
+        "platforms": [
+          {"platform": "京东", "price": 1599, "shop": "京东自营", "url": "https://item.jd.com/100040003.html"},
+          {"platform": "淘宝", "price": 1499, "shop": "梵想旗舰店", "url": "https://item.taobao.com/item.htm?id=400003"},
+          {"platform": "拼多多", "price": 1399, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=402"}
+        ],
+        "best_price": 1399, "best_platform": "拼多多"
+      },
+      {
+        "name": "三星 990 PRO 2TB NVMe",
+        "platforms": [
+          {"platform": "京东", "price": 2199, "shop": "京东自营", "url": "https://item.jd.com/100040004.html"},
+          {"platform": "淘宝", "price": 2099, "shop": "三星旗舰店", "url": "https://item.taobao.com/item.htm?id=400004"},
+          {"platform": "拼多多", "price": 1799, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=403"}
+        ],
+        "best_price": 1799, "best_platform": "拼多多"
+      },
+      {
+        "name": "致态 TiPlus7100s 2TB NVMe",
+        "platforms": [
+          {"platform": "京东", "price": 1959, "shop": "京东自营", "url": "https://item.jd.com/100040005.html"},
+          {"platform": "淘宝", "price": 1850, "shop": "致态旗舰店", "url": "https://item.taobao.com/item.htm?id=400005"},
+          {"platform": "拼多多", "price": 1750, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=404"}
+        ],
+        "best_price": 1750, "best_platform": "拼多多"
+      },
+      {
+        "name": "致态 TiPro9000 2TB PCIe5.0",
+        "platforms": [
+          {"platform": "京东", "price": 2579, "shop": "京东自营", "url": "https://item.jd.com/100040006.html"},
+          {"platform": "淘宝", "price": 2450, "shop": "致态旗舰店", "url": "https://item.taobao.com/item.htm?id=400006"},
+          {"platform": "拼多多", "price": 2350, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=405"}
+        ],
+        "best_price": 2350, "best_platform": "拼多多"
       }
     ],
     "mobo": [
@@ -138,8 +432,7 @@
           {"platform": "淘宝", "price": 750, "shop": "华硕官方旗舰店", "url": "https://item.taobao.com/item.htm?id=500001"},
           {"platform": "拼多多", "price": 720, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=500"}
         ],
-        "best_price": 720,
-        "best_platform": "拼多多"
+        "best_price": 720, "best_platform": "拼多多"
       },
       {
         "name": "华硕 B650M-K AM5",
@@ -148,8 +441,88 @@
           {"platform": "淘宝", "price": 760, "shop": "华硕官方旗舰店", "url": "https://item.taobao.com/item.htm?id=500002"},
           {"platform": "拼多多", "price": 730, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=501"}
         ],
-        "best_price": 730,
-        "best_platform": "拼多多"
+        "best_price": 730, "best_platform": "拼多多"
+      },
+      {
+        "name": "华硕 B760M-AYW WIFI D5",
+        "platforms": [
+          {"platform": "京东", "price": 849, "shop": "华硕京东自营旗舰店", "url": "https://item.jd.com/100050003.html"},
+          {"platform": "淘宝", "price": 800, "shop": "华硕官方旗舰店", "url": "https://item.taobao.com/item.htm?id=500003"},
+          {"platform": "拼多多", "price": 770, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=502"}
+        ],
+        "best_price": 770, "best_platform": "拼多多"
+      },
+      {
+        "name": "微星 MAG B760M MORTAR WIFI II DDR5",
+        "platforms": [
+          {"platform": "京东", "price": 899, "shop": "微星京东自营旗舰店", "url": "https://item.jd.com/100050004.html"},
+          {"platform": "淘宝", "price": 850, "shop": "微星官方旗舰店", "url": "https://item.taobao.com/item.htm?id=500004"},
+          {"platform": "拼多多", "price": 820, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=503"}
+        ],
+        "best_price": 820, "best_platform": "拼多多"
+      },
+      {
+        "name": "华硕 TUF GAMING B760M-PLUS WIFI D5",
+        "platforms": [
+          {"platform": "京东", "price": 1199, "shop": "华硕京东自营旗舰店", "url": "https://item.jd.com/100050005.html"},
+          {"platform": "淘宝", "price": 1140, "shop": "华硕官方旗舰店", "url": "https://item.taobao.com/item.htm?id=500005"},
+          {"platform": "拼多多", "price": 1099, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=504"}
+        ],
+        "best_price": 1099, "best_platform": "拼多多"
+      },
+      {
+        "name": "微星 Z790-A MAX WIFI",
+        "platforms": [
+          {"platform": "京东", "price": 1999, "shop": "微星京东自营旗舰店", "url": "https://item.jd.com/100050006.html"},
+          {"platform": "淘宝", "price": 1899, "shop": "微星官方旗舰店", "url": "https://item.taobao.com/item.htm?id=500006"},
+          {"platform": "拼多多", "price": 1799, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=505"}
+        ],
+        "best_price": 1799, "best_platform": "拼多多"
+      },
+      {
+        "name": "技嘉 B850M",
+        "platforms": [
+          {"platform": "京东", "price": 1749, "shop": "技嘉京东自营旗舰店", "url": "https://item.jd.com/100050007.html"},
+          {"platform": "淘宝", "price": 1650, "shop": "技嘉官方旗舰店", "url": "https://item.taobao.com/item.htm?id=500007"},
+          {"platform": "拼多多", "price": 1580, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=506"}
+        ],
+        "best_price": 1580, "best_platform": "拼多多"
+      },
+      {
+        "name": "华硕 X870E",
+        "platforms": [
+          {"platform": "京东", "price": 3199, "shop": "华硕京东自营旗舰店", "url": "https://item.jd.com/100050008.html"},
+          {"platform": "淘宝", "price": 3050, "shop": "华硕官方旗舰店", "url": "https://item.taobao.com/item.htm?id=500008"},
+          {"platform": "拼多多", "price": 2999, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=507"}
+        ],
+        "best_price": 2999, "best_platform": "拼多多"
+      },
+      {
+        "name": "七彩虹 B760M DDR5 WIFI",
+        "platforms": [
+          {"platform": "京东", "price": 749, "shop": "七彩虹京东自营旗舰店", "url": "https://item.jd.com/100050009.html"},
+          {"platform": "淘宝", "price": 700, "shop": "七彩虹官方旗舰店", "url": "https://item.taobao.com/item.htm?id=500009"},
+          {"platform": "拼多多", "price": 649, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=508"}
+        ],
+        "best_price": 649, "best_platform": "拼多多"
+      },
+      {
+        "name": "微星 B760M 爆破弹 WIFI D4",
+        "platforms": [
+          {"platform": "京东", "price": 750, "shop": "微星京东自营旗舰店", "url": "https://item.jd.com/100050010.html"},
+          {"platform": "淘宝", "price": 720, "shop": "微星官方旗舰店", "url": "https://item.taobao.com/item.htm?id=500010"},
+          {"platform": "拼多多", "price": 700, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=509"}
+        ],
+        "best_price": 700, "best_platform": "拼多多"
+      },
+      {
+        "name": "技嘉 B650M 电竞雕",
+        "platforms": [
+          {"platform": "京东", "price": 2499, "shop": "技嘉京东自营旗舰店", "url": "https://item.jd.com/100050011.html"},
+          {"platform": "淘宝", "price": 2380, "shop": "技嘉官方旗舰店", "url": "https://item.taobao.com/item.htm?id=500011"},
+          {"platform": "拼多多", "price": 2287, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=510"}
+        ],
+        "best_price": 2287, "best_platform": "拼多多"
       }
     ],
     "psu": [
@@ -160,18 +533,70 @@
           {"platform": "淘宝", "price": 350, "shop": "利民旗舰店", "url": "https://item.taobao.com/item.htm?id=600001"},
           {"platform": "拼多多", "price": 320, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=600"}
         ],
-        "best_price": 320,
-        "best_platform": "拼多多"
+        "best_price": 320, "best_platform": "拼多多"
+      },
+      {
+        "name": "鑫谷 GD850W 金牌 ATX3.1",
+        "platforms": [
+          {"platform": "京东", "price": 419, "shop": "京东自营", "url": "https://item.jd.com/100060002.html"},
+          {"platform": "淘宝", "price": 390, "shop": "鑫谷旗舰店", "url": "https://item.taobao.com/item.htm?id=600002"},
+          {"platform": "拼多多", "price": 360, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=601"}
+        ],
+        "best_price": 360, "best_platform": "拼多多"
       },
       {
         "name": "航嘉 WD850K 金牌全模组 850W",
         "platforms": [
-          {"platform": "京东", "price": 438, "shop": "京东自营", "url": "https://item.jd.com/100060002.html"},
-          {"platform": "淘宝", "price": 400, "shop": "航嘉旗舰店", "url": "https://item.taobao.com/item.htm?id=600002"},
-          {"platform": "拼多多", "price": 380, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=601"}
+          {"platform": "京东", "price": 438, "shop": "京东自营", "url": "https://item.jd.com/100060003.html"},
+          {"platform": "淘宝", "price": 400, "shop": "航嘉旗舰店", "url": "https://item.taobao.com/item.htm?id=600003"},
+          {"platform": "拼多多", "price": 380, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=602"}
         ],
-        "best_price": 380,
-        "best_platform": "拼多多"
+        "best_price": 380, "best_platform": "拼多多"
+      },
+      {
+        "name": "艾湃电竞 DPS 850W 金牌全模组",
+        "platforms": [
+          {"platform": "京东", "price": 499, "shop": "京东自营", "url": "https://item.jd.com/100060004.html"},
+          {"platform": "淘宝", "price": 460, "shop": "艾湃电竞旗舰店", "url": "https://item.taobao.com/item.htm?id=600004"},
+          {"platform": "拼多多", "price": 430, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=603"}
+        ],
+        "best_price": 430, "best_platform": "拼多多"
+      },
+      {
+        "name": "酷冷至尊雷霆金 850W 金牌",
+        "platforms": [
+          {"platform": "京东", "price": 549, "shop": "京东自营", "url": "https://item.jd.com/100060005.html"},
+          {"platform": "淘宝", "price": 510, "shop": "酷冷至尊旗舰店", "url": "https://item.taobao.com/item.htm?id=600005"},
+          {"platform": "拼多多", "price": 480, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=604"}
+        ],
+        "best_price": 480, "best_platform": "拼多多"
+      },
+      {
+        "name": "艾湃电竞 DPS 1000W 金牌全模组",
+        "platforms": [
+          {"platform": "京东", "price": 599, "shop": "京东自营", "url": "https://item.jd.com/100060006.html"},
+          {"platform": "淘宝", "price": 560, "shop": "艾湃电竞旗舰店", "url": "https://item.taobao.com/item.htm?id=600006"},
+          {"platform": "拼多多", "price": 530, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=605"}
+        ],
+        "best_price": 530, "best_platform": "拼多多"
+      },
+      {
+        "name": "航嘉 MVP K850 金牌 850W",
+        "platforms": [
+          {"platform": "京东", "price": 799, "shop": "京东自营", "url": "https://item.jd.com/100060007.html"},
+          {"platform": "淘宝", "price": 750, "shop": "航嘉旗舰店", "url": "https://item.taobao.com/item.htm?id=600007"},
+          {"platform": "拼多多", "price": 700, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=606"}
+        ],
+        "best_price": 700, "best_platform": "拼多多"
+      },
+      {
+        "name": "SFX 750W 金牌电源",
+        "platforms": [
+          {"platform": "京东", "price": 699, "shop": "京东自营", "url": "https://item.jd.com/100060008.html"},
+          {"platform": "淘宝", "price": 650, "shop": "旗舰店", "url": "https://item.taobao.com/item.htm?id=600008"},
+          {"platform": "拼多多", "price": 599, "shop": "百亿补贴", "url": "https://mobile.yangkeduo.com/goods.html?goods_id=607"}
+        ],
+        "best_price": 599, "best_platform": "拼多多"
       }
     ]
   },
