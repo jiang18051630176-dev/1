@@ -595,7 +595,8 @@ async function loadMultiPlatformPrices() {
   }
 
   if (!data) { console.log('ℹ️ 使用默认价格数据'); return; }
-    
+
+  try {
     // 更新平台状态
     if (data.sources) {
       data.sources.forEach(s => {
@@ -603,7 +604,7 @@ async function loadMultiPlatformPrices() {
         if (key) priceSourceStatus[key] = 'active';
       });
     }
-    
+
     // 构建多平台价格索引
     multiPlatformPrices = {};
     if (data.parts) {
@@ -627,17 +628,14 @@ async function loadMultiPlatformPrices() {
         });
       });
     }
-    
+
     // 合并实时价格到 HARDWARE
     mergeMultiPlatformPrices();
-    
+
     pricesUpdateTime = data.updated || new Date().toISOString();
-    console.log('✅ 多平台实时价格已加载 (京东/淘宝/拼多多/闲鱼/什么值得买)');
-    console.log('   平台状态:', priceSourceStatus);
-  } catch(e) { 
+    console.log('✅ 多平台实时价格已加载');
+  } catch(e) {
     console.log('⚠️ 多平台价格加载失败: ' + e.message);
-    // 标记为过期
-    Object.keys(priceSourceStatus).forEach(k => { if (priceSourceStatus[k] === 'active') priceSourceStatus[k] = 'stale'; });
   }
 }
 
